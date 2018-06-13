@@ -1,12 +1,13 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
 
-	public List<int> FrameList = new List<int>();
-	
+	public readonly List<Frame> FrameList = new List<Frame>();
 	private PinController _pinController;
 	private BowlingBall _ball;
 	private ActionMaster _actionMaster = new ActionMaster();
@@ -27,10 +28,15 @@ public class GameManager : MonoBehaviour
 	
 	public int HandleEndBowl(int lastSettledCount, int standingCount)
 	{
-		FrameList.Add(lastSettledCount - standingCount);
-		_scoreManager.UpdateScore(FrameList);
+		AddBowlToFramelist(lastSettledCount, standingCount);
+		return UpdateScoreAndDoNextAction(standingCount);
+	}
+
+	private int UpdateScoreAndDoNextAction(int standingCount)
+	{
+		//_scoreManager.UpdateScore(FrameList);
 		var action = _actionMaster.Bowl(FrameList);
-		
+
 		switch (action)
 		{
 			case ActionMaster.Action.MidFrameReset:
@@ -47,9 +53,40 @@ public class GameManager : MonoBehaviour
 				return TOTAL_PINS;
 			case ActionMaster.Action.EndGame:
 				FrameList.Clear();
+				_scoreManager.ResetScoresInTime(5f);
 				return TOTAL_PINS;
 			default:
 				throw new UnityException("Action not found");
+		}
+	}
+
+	private void AddBowlToFramelist(int lastSettledCount, int standingCount)
+	{
+		var lastFrame = new Frame();
+		if (FrameList.Count >= 1)
+		{
+			lastFrame = FrameList.Last();
+			if (!lastFrame.FrameComplete())
+			{
+				lastFrame.Pinfalls.Add(lastSettledCount - standingCount);
+			}
+			else
+			{
+				var newFrame = new Frame();
+				newFrame.Pinfalls.Add(lastSettledCount - standingCount);
+				FrameList.Add(newFrame);
+			}
+		}
+		else
+		{
+			var newFrame = new Frame();
+			newFrame.Pinfalls.Add(lastSettledCount - standingCount);
+			FrameList.Add(newFrame);
+		}
+
+		if (FrameList.Count == 10)
+		{
+			FrameList.Last().SetLastFrame();
 		}
 	}
 

@@ -8,7 +8,7 @@ public class ActionMasterTest
 {
 
 	private ActionMaster.Action endTurn = ActionMaster.Action.EndTurn;
-	private ActionMaster.Action tidy = ActionMaster.Action.MidFrameReset;
+	private ActionMaster.Action midFrameReset = ActionMaster.Action.MidFrameReset;
 	private ActionMaster.Action reset = ActionMaster.Action.FrameReset;
 	private ActionMaster.Action endGame = ActionMaster.Action.EndGame;
 	private ActionMaster _actionMaster;
@@ -35,7 +35,9 @@ public class ActionMasterTest
 	public void T01OneStrikeReturnsEndTurn()
 	{
 		_gameManager.FrameList.Clear();
-		_gameManager.FrameList.Add(10);
+		Frame frame = new Frame();
+		frame.Pinfalls.Add(10);
+		_gameManager.FrameList.Add(frame);
 		Assert.AreEqual(endTurn, _actionMaster.Bowl(_gameManager.FrameList));
 	}
 
@@ -43,16 +45,20 @@ public class ActionMasterTest
 	public void T02Bowl8ReturnsTidy()
 	{
 		_gameManager.FrameList.Clear();
-		_gameManager.FrameList.Add(8);
-		Assert.AreEqual(tidy, _actionMaster.Bowl(_gameManager.FrameList));
+		Frame frame = new Frame();
+		frame.Pinfalls.Add(8);
+		_gameManager.FrameList.Add(frame);
+		Assert.AreEqual(midFrameReset, _actionMaster.Bowl(_gameManager.FrameList));
 	}
 
 	[Test]
 	public void T03Bowl2Then8ReturnEndTurn()
 	{
 		_gameManager.FrameList.Clear();
-		_gameManager.FrameList.Add(2);
-		_gameManager.FrameList.Add(8);
+		Frame frame = new Frame();
+		frame.Pinfalls.Add(8);
+		frame.Pinfalls.Add(2);
+		_gameManager.FrameList.Add(frame);
 		Assert.AreEqual(endTurn, _actionMaster.Bowl(_gameManager.FrameList));
 			
 	}
@@ -61,163 +67,103 @@ public class ActionMasterTest
 	public void T04EndGameAfter10ThFrame()
 	{
 		_gameManager.FrameList.Clear();
-		_gameManager.FrameList.Add(1); //1st frame
-		_gameManager.FrameList.Add(1);
-		_gameManager.FrameList.Add(1); //2nd frame
-		_gameManager.FrameList.Add(1);
-		_gameManager.FrameList.Add(1); //3rd frame
-		_gameManager.FrameList.Add(1);
-		_gameManager.FrameList.Add(1); //4th frame
-		_gameManager.FrameList.Add(1);
-		_gameManager.FrameList.Add(1); //5th frame
-		_gameManager.FrameList.Add(1);
-		_gameManager.FrameList.Add(1); //6th frame
-		_gameManager.FrameList.Add(1);
-		_gameManager.FrameList.Add(1); //7th frame
-		_gameManager.FrameList.Add(1);
-		_gameManager.FrameList.Add(1); //8th frame
-		_gameManager.FrameList.Add(1);
-		_gameManager.FrameList.Add(1); //9th frame
-		_gameManager.FrameList.Add(1);
-		_gameManager.FrameList.Add(1); //10th frame
-		_gameManager.FrameList.Add(1);
+		for (int i = 0; i <= 9; i++)
+		{
+			Frame frame = new Frame();
+			frame.Pinfalls.Add(1);
+			frame.Pinfalls.Add(1);
+			_gameManager.FrameList.Add(frame);
+		}
+		
 		Assert.AreEqual(endGame, _actionMaster.Bowl(_gameManager.FrameList));
 	}
 
 	[Test]
 	public void T05AdditionalBowlIfStrikeOnLastFrame()
 	{
-		_gameManager.FrameList.Clear();
-		_gameManager.FrameList.Add(1); //1st frame
-		_gameManager.FrameList.Add(1);
-		_gameManager.FrameList.Add(1); //2nd frame
-		_gameManager.FrameList.Add(1);
-		_gameManager.FrameList.Add(1); //3rd frame
-		_gameManager.FrameList.Add(1);
-		_gameManager.FrameList.Add(1); //4th frame
-		_gameManager.FrameList.Add(1);
-		_gameManager.FrameList.Add(1); //5th frame
-		_gameManager.FrameList.Add(1);
-		_gameManager.FrameList.Add(1); //6th frame
-		_gameManager.FrameList.Add(1);
-		_gameManager.FrameList.Add(1); //7th frame
-		_gameManager.FrameList.Add(1);
-		_gameManager.FrameList.Add(1); //8th frame
-		_gameManager.FrameList.Add(1);
-		_gameManager.FrameList.Add(1); //9th frame
-		_gameManager.FrameList.Add(1);
-		_gameManager.FrameList.Add(10); //10th Frame
+		for (int i = 0; i < 9; i++)
+		{
+			Frame frame = new Frame();
+			frame.Pinfalls.Add(1);
+			frame.Pinfalls.Add(1);
+			_gameManager.FrameList.Add(frame);
+		}
+
+		Frame tenthFrame = new Frame();
+		tenthFrame.Pinfalls.Add(10);
+		_gameManager.FrameList.Add(tenthFrame); 
 		Assert.AreEqual(reset, _actionMaster.Bowl(_gameManager.FrameList)); 
 	}
 
 	[Test]
 	public void T06EndGameAfter21Bowls()
 	{
-		_gameManager.FrameList.Clear();	
-		Debug.Log(_gameManager.FrameList.Count);
-		_gameManager.FrameList.Add(8);//1st frame
-		_gameManager.FrameList.Add(1); 
-		_gameManager.FrameList.Add(1);//2nd frame
-		_gameManager.FrameList.Add(1); 
-		_gameManager.FrameList.Add(1);//3rd frame
-		_gameManager.FrameList.Add(1); 
-		_gameManager.FrameList.Add(1); //4th frame
-		_gameManager.FrameList.Add(1);
-		_gameManager.FrameList.Add(1);//5th frame
-		_gameManager.FrameList.Add(1); 
-		_gameManager.FrameList.Add(1);
-		_gameManager.FrameList.Add(1); //6th frame
-		_gameManager.FrameList.Add(1);
-		_gameManager.FrameList.Add(1); //7th frame
-		_gameManager.FrameList.Add(1);
-		_gameManager.FrameList.Add(1); //8th frame
-		_gameManager.FrameList.Add(1);
-		_gameManager.FrameList.Add(1); //9th frame
-		_gameManager.FrameList.Add(1);
-		_gameManager.FrameList.Add(10); //10th Frame
-		_gameManager.FrameList.Add(1);
-		Debug.Log(_gameManager.FrameList.Count);
+		for (int i = 0; i < 9; i++)
+		{
+			Frame frame = new Frame();
+			frame.Pinfalls.Add(1);
+			frame.Pinfalls.Add(1);
+			_gameManager.FrameList.Add(frame);
+		}
+		Frame tenthFrame = new Frame();
+		tenthFrame.Pinfalls.Add(10);
+		tenthFrame.Pinfalls.Add(1);
+		tenthFrame.Pinfalls.Add(1);
+		_gameManager.FrameList.Add(tenthFrame); //10th Frame
 		Assert.AreEqual(endGame, _actionMaster.Bowl(_gameManager.FrameList));
 	}
 
 	[Test]
 	public void T07AdditionalBowlIfSpaceOnLastFrame()
 	{
-		_gameManager.FrameList.Clear();
-		_gameManager.FrameList.Add(1); //1st frame
-		_gameManager.FrameList.Add(1);
-		_gameManager.FrameList.Add(1); //2nd frame
-		_gameManager.FrameList.Add(1);
-		_gameManager.FrameList.Add(1); //3rd frame
-		_gameManager.FrameList.Add(1);
-		_gameManager.FrameList.Add(1); //4th frame
-		_gameManager.FrameList.Add(1);
-		_gameManager.FrameList.Add(1); //5th frame
-		_gameManager.FrameList.Add(1);
-		_gameManager.FrameList.Add(1); //6th frame
-		_gameManager.FrameList.Add(1);
-		_gameManager.FrameList.Add(1); //7th frame
-		_gameManager.FrameList.Add(1);
-		_gameManager.FrameList.Add(1); //8th frame
-		_gameManager.FrameList.Add(1);
-		_gameManager.FrameList.Add(1); //9th frame
-		_gameManager.FrameList.Add(1);
-		_gameManager.FrameList.Add(8); //10th Frame
-		_gameManager.FrameList.Add(2);
+		for (int i = 0; i < 9; i++)
+		{
+			Frame frame = new Frame();
+			frame.Pinfalls.Add(1);
+			frame.Pinfalls.Add(1);
+			_gameManager.FrameList.Add(frame);
+		}
+
+		var tenthFrame = new Frame();
+		tenthFrame.Pinfalls.Add(8);
+		tenthFrame.Pinfalls.Add(2);
+		_gameManager.FrameList.Add(tenthFrame); 
 		Assert.AreEqual(reset, _actionMaster.Bowl(_gameManager.FrameList));
 	}
 
 	[Test]
 	public void T08TidyOnFrame20AfterStrike()
 	{
-		_gameManager.FrameList.Clear();		
-		_gameManager.FrameList.Add(1); //1st frame
-		_gameManager.FrameList.Add(1);
-		_gameManager.FrameList.Add(1); //2nd frame
-		_gameManager.FrameList.Add(1);
-		_gameManager.FrameList.Add(1); //3rd frame
-		_gameManager.FrameList.Add(1);
-		_gameManager.FrameList.Add(1); //4th frame
-		_gameManager.FrameList.Add(1);
-		_gameManager.FrameList.Add(1); //5th frame
-		_gameManager.FrameList.Add(1);
-		_gameManager.FrameList.Add(1); //6th frame
-		_gameManager.FrameList.Add(1);
-		_gameManager.FrameList.Add(1); //7th frame
-		_gameManager.FrameList.Add(1);
-		_gameManager.FrameList.Add(1); //8th frame
-		_gameManager.FrameList.Add(1);
-		_gameManager.FrameList.Add(1); //9th frame
-		_gameManager.FrameList.Add(1);
-		_gameManager.FrameList.Add(10); //10th Frame
-		_gameManager.FrameList.Add(5);
-		Assert.AreEqual(tidy, _actionMaster.Bowl(_gameManager.FrameList)); 
+		for (int i = 0; i < 9; i++)
+		{
+			Frame frame = new Frame();
+			frame.Pinfalls.Add(1);
+			frame.Pinfalls.Add(1);
+			_gameManager.FrameList.Add(frame);
+		}
+
+		var tenthFrame = new Frame();
+		tenthFrame.Pinfalls.Add(10);
+		tenthFrame.Pinfalls.Add(5);
+		_gameManager.FrameList.Add(tenthFrame); 
+		Assert.AreEqual(midFrameReset, _actionMaster.Bowl(_gameManager.FrameList)); 
 	}
 
 	[Test]
 	public void T09ResetAfter2StrikesOnFrame21()
 	{
-		_gameManager.FrameList.Clear();
-		_gameManager.FrameList.Add(1); //1st frame
-		_gameManager.FrameList.Add(1);
-		_gameManager.FrameList.Add(1); //2nd frame
-		_gameManager.FrameList.Add(1);
-		_gameManager.FrameList.Add(1); //3rd frame
-		_gameManager.FrameList.Add(1);
-		_gameManager.FrameList.Add(1); //4th frame
-		_gameManager.FrameList.Add(1);
-		_gameManager.FrameList.Add(1); //5th frame
-		_gameManager.FrameList.Add(1);
-		_gameManager.FrameList.Add(1); //6th frame
-		_gameManager.FrameList.Add(1);
-		_gameManager.FrameList.Add(1); //7th frame
-		_gameManager.FrameList.Add(1);
-		_gameManager.FrameList.Add(1); //8th frame
-		_gameManager.FrameList.Add(1);
-		_gameManager.FrameList.Add(1); //9th frame
-		_gameManager.FrameList.Add(1);
-		_gameManager.FrameList.Add(10); //10th Frame
-		_gameManager.FrameList.Add((10));
+		for (int i = 0; i < 9; i++)
+		{
+			Frame frame = new Frame();
+			frame.Pinfalls.Add(1);
+			frame.Pinfalls.Add(1);
+			_gameManager.FrameList.Add(frame);
+		}
+
+		Frame tenthFrame = new Frame();
+		tenthFrame.Pinfalls.Add(10);
+		tenthFrame.Pinfalls.Add(10);
+		_gameManager.FrameList.Add(tenthFrame); 
 		Assert.AreEqual(reset,_actionMaster.Bowl(_gameManager.FrameList));
 		
 	}
@@ -225,19 +171,26 @@ public class ActionMasterTest
 	[Test]
 	public void T10PinsOnSecondBowlTidyAfterNextRoll()
 	{
-		_gameManager.FrameList.Clear();	
-		_gameManager.FrameList.Add(0);
-		_gameManager.FrameList.Add(10);
-		_gameManager.FrameList.Add(3);
-		Assert.AreEqual(tidy, _actionMaster.Bowl(_gameManager.FrameList));
+		_gameManager.FrameList.Clear();
+		Frame firstFrame = new Frame();
+		firstFrame.Pinfalls.Add(0);
+		firstFrame.Pinfalls.Add(10);
+
+		var secondFrame = new Frame();
+		secondFrame.Pinfalls.Add(3);
+		_gameManager.FrameList.Add(firstFrame);
+		_gameManager.FrameList.Add(secondFrame);
+		Assert.AreEqual(midFrameReset, _actionMaster.Bowl(_gameManager.FrameList));
 	}
 	
 	[Test]
 	public void T1110PinsOnSecondBowlEndTun()
 	{	
 		_gameManager.FrameList.Clear();
-		_gameManager.FrameList.Add(0);
-		_gameManager.FrameList.Add(10);
+		var firstFrame = new Frame();
+		firstFrame.Pinfalls.Add(0);
+		firstFrame.Pinfalls.Add(10);
+		_gameManager.FrameList.Add(firstFrame);
 		Assert.AreEqual(endTurn, _actionMaster.Bowl(_gameManager.FrameList));
 	}
 
@@ -245,38 +198,34 @@ public class ActionMasterTest
 	public void T12EndTurnAfterSpareAndTwoRolls()
 	{
 		_gameManager.FrameList.Clear();
-		_gameManager.FrameList.Add(0);
-		_gameManager.FrameList.Add(10);
-		_gameManager.FrameList.Add(1);
-		_gameManager.FrameList.Add(3);
+		var firstFrame = new Frame();
+		firstFrame.Pinfalls.Add(0);
+		firstFrame.Pinfalls.Add(10);
+
+		var secondFrame = new Frame();
+		secondFrame.Pinfalls.Add(1);
+		secondFrame.Pinfalls.Add(3);
+		_gameManager.FrameList.Add(firstFrame);
+		_gameManager.FrameList.Add(secondFrame);
 		Assert.AreEqual(endTurn, _actionMaster.Bowl(_gameManager.FrameList));
 	}
 
 	[Test]
 	public void T13LastFrameTurkey()
 	{
-		_gameManager.FrameList.Clear();
-		_gameManager.FrameList.Add(1); //1st frame
-		_gameManager.FrameList.Add(1);
-		_gameManager.FrameList.Add(1); //2nd frame
-		_gameManager.FrameList.Add(1);
-		_gameManager.FrameList.Add(1); //3rd frame
-		_gameManager.FrameList.Add(1);
-		_gameManager.FrameList.Add(1); //4th frame
-		_gameManager.FrameList.Add(1);
-		_gameManager.FrameList.Add(1); //5th frame
-		_gameManager.FrameList.Add(1);
-		_gameManager.FrameList.Add(1); //6th frame
-		_gameManager.FrameList.Add(1);
-		_gameManager.FrameList.Add(1); //7th frame
-		_gameManager.FrameList.Add(1);
-		_gameManager.FrameList.Add(1); //8th frame
-		_gameManager.FrameList.Add(1);
-		_gameManager.FrameList.Add(1); //9th frame
-		_gameManager.FrameList.Add(1);
-		_gameManager.FrameList.Add(10); //10th Frame
-		_gameManager.FrameList.Add(10);
-		_gameManager.FrameList.Add(10);
+		for (int i = 0; i < 9; i++)
+		{
+			var frame = new Frame();
+			frame.Pinfalls.Add(1);
+			frame.Pinfalls.Add(1);
+			_gameManager.FrameList.Add(frame);
+		}
+
+		var tenthFrame = new Frame();
+		tenthFrame.Pinfalls.Add(10);
+		tenthFrame.Pinfalls.Add(10);
+		tenthFrame.Pinfalls.Add(10);
+		_gameManager.FrameList.Add(tenthFrame); 
 		Assert.AreEqual(endGame,_actionMaster.Bowl(_gameManager.FrameList));
 	}
 }

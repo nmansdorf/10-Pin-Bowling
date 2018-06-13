@@ -11,7 +11,6 @@
         <e p="Editor" t="Include">
           <e p="ActionMasterTest.cs" t="Include" />
           <e p="OurScoreDisplayTest1.cs" t="Include" />
-          <e p="ScoreManagerTest.cs" t="Include" />
         </e>
         <e p="Plugins" t="Include">
           <e p="Editor" t="Include">
@@ -26,6 +25,7 @@
           <e p="BowlingBall.cs" t="Include" />
           <e p="CameraControl.cs" t="Include" />
           <e p="DragLaunch.cs" t="Include" />
+          <e p="Frame.cs" t="Include" />
           <e p="FrameScoreDisplay.cs" t="Include" />
           <e p="GameManager.cs" t="Include" />
           <e p="Pin.cs" t="Include" />

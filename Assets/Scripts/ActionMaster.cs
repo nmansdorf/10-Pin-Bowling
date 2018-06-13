@@ -8,7 +8,6 @@ using System.Resources;
 public class ActionMaster
 {
 
-	private List<int> frameList;
 	private const int STRIKE = 10;
 	private const int SPARE = 10;
 	
@@ -20,55 +19,56 @@ public class ActionMaster
 		EndGame
 	};
 	
-	public Action Bowl(List<int> frameList)
+	public Action Bowl(List<Frame> frameList)
 	{
-		var lastBowl = frameList.Last();
+		var lastBowl = frameList.Last().Pinfalls.Last();
 		
 		if (lastBowl < 0 || lastBowl > STRIKE)
 		{
 			throw new UnityException("Invalid pin count");
 		}
-		
-		if (frameList.Count == 21)
+
+		//10th Frame
+		if (frameList.Last().IsLastFrame())
 		{
-			return Action.EndGame;
-		} 
-		if(frameList.Count == 20)
-		{
-			if (frameList[19 - 1] == STRIKE && frameList[20 - 1] < STRIKE)
+			//3rd bowl of tenth frame
+			if (frameList.Last().FrameComplete())
 			{
-				return Action.MidFrameReset;
+				return Action.EndGame;
+			} 
+		
+			//2nd bowl of tenth frame
+			if(frameList.Last().Pinfalls.Count >= 2)
+			{
+				if (frameList.Last().Pinfalls[0] == STRIKE && frameList.Last().Pinfalls[1] < STRIKE)
+				{
+					return Action.MidFrameReset;
+				}
+				if (frameList.Last().IsSpare())
+				{
+					return Action.FrameReset;
+				}
+				return Action.EndGame;
 			}
-			if (frameList[19 - 1] + frameList[20 - 1] >= SPARE)
+			//first bowl of 10th frame
+			if(frameList.Last().Pinfalls[0] == 1 && lastBowl == STRIKE)
 			{
 				return Action.FrameReset;
 			}
-			return Action.EndGame;
 		}
-		
-		if( frameList.Count  == 19 && lastBowl == STRIKE) 
-		{
-			frameList.Add(0);
-			return Action.FrameReset;
-		}
-		
-		if (frameList.Count  % 2 == 0)
+
+		if (frameList.Last().FrameComplete())
 		{
 			return Action.EndTurn;
 		}
-		if (frameList.Count  % 2 != 0)
-		{
-			if (lastBowl == STRIKE)
-			{
-				frameList.Add(0);
-				return Action.EndTurn;
-			}
 
+		if (frameList.Last().Pinfalls[0] != STRIKE)
+		{
 			return Action.MidFrameReset;
-		} 
-		
+		}
+
+
 		throw new UnityException("Not sure what action to return!");
-		
 	}
 
 }
