@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ContentModelStore">
+    <e p="$USER_HOME$/Library/Caches/Rider2017.3/resharper-host/local/Transient/ReSharperHost/v11/SolutionCaches/_10 Pin Bowling.538535840.00" t="ExcludeRecursive" />
+    <e p="$PROJECT_DIR$" t="IncludeRecursive">
+      <e p="10 Pin Bowling.sln" t="IncludeFlat" />
+      <e p="Assembly-CSharp-Editor-firstpass.csproj" t="IncludeRecursive" />
+      <e p="Assembly-CSharp-Editor.csproj" t="IncludeRecursive" />
+      <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
+      <e p="Assets" t="Include">
+        <e p="Editor" t="Include">
+          <e p="ActionMasterTest.cs" t="Include" />
+          <e p="OurScoreDisplayTest1.cs" t="Include" />
+          <e p="ScoreManagerTest.cs" t="Include" />
+        </e>
+        <e p="Plugins" t="Include">
+          <e p="Editor" t="Include">
+            <e p="JetBrains" t="Include">
+              <e p="Unity3DRider.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="Scripts" t="Include">
+          <e p="ActionMaster.cs" t="Include" />
+          <e p="ActionMaster2.cs" t="Include" />
+          <e p="BowlingBall.cs" t="Include" />
+          <e p="CameraControl.cs" t="Include" />
+          <e p="DragLaunch.cs" t="Include" />
+          <e p="FrameScoreDisplay.cs" t="Include" />
+          <e p="GameManager.cs" t="Include" />
+          <e p="Pin.cs" t="Include" />
+          <e p="PinController.cs" t="Include" />
+          <e p="PinCounterBox.cs" t="Include" />
+          <e p="PinPosition.cs" t="Include" />
+          <e p="PinStateMachine.cs" t="Include" />
+          <e p="ScoreManager.cs" t="Include" />
+          <e p="Swiper.cs" t="Include" />
+        </e>
+      </e>
+      <e p="Library" t="ExcludeRecursive" />
+      <e p="obj" t="ExcludeRecursive" />
+      <e p="packages" t="ExcludeRecursive" />
+      <e p="Temp" t="ExcludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+      </e>
+    </e>
+  </component>
+</project>
