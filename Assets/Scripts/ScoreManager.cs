@@ -1,11 +1,14 @@
 ﻿using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Runtime.Remoting.Channels;
 using System.Security.Policy;
 using System.Xml;
 using System.Xml.Schema;
+using UnityEditor.Experimental.Build.Player;
 using UnityEngine;
 using UnityEngine.SocialPlatforms.Impl;
 
@@ -13,109 +16,105 @@ public class ScoreManager : MonoBehaviour
 {
 
 	public List<FrameScoreDisplay> FrameScoreDisplays;
-	public List<int> Scores = new List<int>();
-	private List<bool> strikeFlags = new List<bool>();
-	private bool spareFlag;
-	
+	private List<int> _scores = new List<int>();
+	private List<UnfinishedFrame> _unfinishedFrames = new List<UnfinishedFrame>();
+	private int _previousScore = 0;
 
-	public void UpdateScore(List<int> frameList)
+	public void UpdateScore(List<Bowl> bowlList)
 	{
-		var frame = FrameCalc(frameList.Count); //Get the Frame index
+		var currentBowlIndex = bowlList.Count - 1;
+		var currentBowl = bowlList[currentBowlIndex];
 		
-		FrameScoreDisplays[frame - 1].SetScore(frameList.Last()); //Update the proper display with a subscore from the last bowl
+		var frame = currentBowl.GetFrame();
+	
+		//Update the proper display with a subscore from the last bowl
+		FrameScoreDisplays[frame].SetScore(currentBowl.GetScore());
 
-		if (frameList.Count % 2 == 0)
-		{
-			CalculateTotalScore(frameList);
-		}
+		CalculateTotalScore(bowlList);
 		
-		if (Scores.Count >= 1)
+		if (_scores.Count > 0)
 		{
 			SetTotalScores();
 		}
+		Debug.Log("previousScore = " + _previousScore);
 	}
 
-	private void CalculateTotalScore(List<int> framelist)
+	public void CalculateTotalScore(List<Bowl> bowls)
 	{
-		Scores.Clear();
-		//Write the total running score for each frame into a list
-		for (int i = 0; i < framelist.Count; i++)
-		{
-			//What frame are we on
-			var frame = FrameCalc(i+1);
-		
-			//What is the current running score
-			var previousScore = 0;
-			if(frame > 1 && Scores.Count >= 1)
-			{
-				previousScore = Scores.Last();
-			}
-		
-			//Condition 1 - strike waits for the next two bowls
-			if (i % 2 == 0 && framelist[i] == 10)
-			{
-				strikeFlags.Add(true);
-			}
-			//Condition 2 - spare waits for the next bowl
-			else if(i % 2 == 1 && framelist[i] + framelist[i - 1] == 10)
-			{
-				spareFlag = true;
-			}
-		
-			//Condition 3 - display score if no spare or strike after second bowl in the frame
-			else if(i % 2 == 1)
-			{
-				Scores.Add(previousScore + framelist[i] + framelist [i - 1]);
-				Debug.Log("Thinks we should put a score in " + Scores.Last());
-			}		
-			
-			if (strikeFlags.Count > 0 && strikeFlags.First() && framelist.Count > i + 2)
-			{
-				Debug.Log("Thinks there has been a strike");
-				var nextBowlScore = framelist[i + 2];
-				var secondBowlScore = 0;
-				if (framelist[i + 2] == 10)
-				{
-					secondBowlScore = framelist[i + 4];
-					Scores.Add(previousScore + 10 + nextBowlScore + secondBowlScore);
-					strikeFlags.RemoveAt(0);		
-				}
-				else
-				{
-					secondBowlScore = framelist[i + 3];
-					Scores.Add(previousScore + 10 + nextBowlScore + secondBowlScore);
-					strikeFlags.RemoveAt(0);	
-				}					
-			}
+		var bowlsIndex = bowls.Count - 1;
+		var currentBowl = bowls[bowlsIndex];
 
-			if (spareFlag && framelist.Count > i + 1)
+		//strike
+		if (currentBowl.GetShotInFrame() == 0 && currentBowl.IsSpareOrStrike())
+		{
+			CheckForFinishedScores(bowls);
+			_unfinishedFrames.Add(new UnfinishedFrame(2, bowlsIndex));
+		}
+		else if (currentBowl.GetShotInFrame() == 1)
+		{
+			var previousBowl = bowls[bowlsIndex - 1];
+			
+			//spare
+			if (previousBowl.GetScore() + currentBowl.GetScore() == 10)
 			{
-				Scores.Add(previousScore + 10 + framelist[i + 1]);
-				Debug.Log("Thinks there has been a spare");
-				spareFlag = false;	
+				CheckForFinishedScores(bowls);
+				_unfinishedFrames.Add(new UnfinishedFrame(1, bowlsIndex));
+			}
+			else
+			{
+				//no strike or spare
+				CheckForFinishedScores(bowls);
+				var score = _previousScore + currentBowl.GetScore() + previousBowl.GetScore();
+				_scores.Add(score);
+				_previousScore = score;
+				_unfinishedFrames.Add(new UnfinishedFrame(0, bowlsIndex));
+			}
+		}
+		CheckForFinishedScores(bowls);
+	}
+
+	private void CheckForFinishedScores(List<Bowl> bowls)
+	{
+		for (int i = 0; i < _unfinishedFrames.Count; i++)
+		{
+			var unfinishedFrame = _unfinishedFrames[i];
+			if (unfinishedFrame.AdditionalBowls != 0)
+			{
+				var score = 0;
+				var extraBowls = unfinishedFrame.AdditionalBowls;
+				var bowlIndex = unfinishedFrame.BowlIndex;
+				if (unfinishedFrame.BowlIndex + extraBowls < bowls.Count)
+				{
+					score = 10;
+					for (int j = 0; j < extraBowls; j++)
+					{
+						score += bowls[bowlIndex + j + 1].GetScore();
+					}
+
+					score += _previousScore;
+					_scores.Add(score);
+					_previousScore = score;
+					unfinishedFrame.AdditionalBowls = 0;
+				}
 			}
 		}
 	}
 
 	private void SetTotalScores()
 	{
-		for (int i = 0; i < Scores.Count; i++)
+		for (int i = 0; i < _scores.Count; i++)
 		{
-			FrameScoreDisplays[i].SetTotalScore(Scores[i]);
+			if (_unfinishedFrames[i].AdditionalBowls == 0)
+			{
+				FrameScoreDisplays[i].SetTotalScore(_scores[i]);
+			}
 		}
 	}
 
-	//returns the frame number based on the number of bowls
-	private int FrameCalc(int totalBowls)
+	public void ResetScores()
 	{
-
-		int frame = totalBowls / 2 + totalBowls % 2;
-		if (frame > 10)
-		{
-			frame = 10;
-		}
-
-		return frame;
+		_unfinishedFrames.Clear();
+		_scores.Clear();
 	}
 
 }

@@ -11,6 +11,8 @@ public class ActionMaster
 	private List<int> frameList;
 	private const int STRIKE = 10;
 	private const int SPARE = 10;
+	private Bowl currentBowl;
+	private Bowl previousBowl;
 	
 	public enum Action
 	{
@@ -20,55 +22,72 @@ public class ActionMaster
 		EndGame
 	};
 	
-	public Action Bowl(List<int> frameList)
+	public Action Bowl(List<Bowl> bowlList)
 	{
-		var lastBowl = frameList.Last();
+		var currentBowlIndex = bowlList.Count - 1;
+		currentBowl = bowlList[currentBowlIndex];
 		
-		if (lastBowl < 0 || lastBowl > STRIKE)
+		if (currentBowl.GetScore() < 0 || currentBowl.GetScore() > STRIKE)
 		{
 			throw new UnityException("Invalid pin count");
 		}
-		
-		if (frameList.Count == 21)
+
+		if (bowlList.Count > 1)
 		{
-			return Action.EndGame;
-		} 
-		if(frameList.Count == 20)
+			previousBowl = bowlList[currentBowlIndex - 1];
+			SetShotCountAndFrameForCurrentBowl();
+		}
+
+		if (currentBowl.GetFrame() == 9)
 		{
-			if (frameList[19 - 1] == STRIKE && frameList[20 - 1] < STRIKE)
+			if (currentBowl.GetShotInFrame() == 2)
 			{
-				return Action.MidFrameReset;
+				return Action.EndGame;
 			}
-			if (frameList[19 - 1] + frameList[20 - 1] >= SPARE)
+			if (currentBowl.GetShotInFrame() == 1)
+			{
+				if (previousBowl.IsSpareOrStrike() && !currentBowl.IsSpareOrStrike())
+				{
+					return Action.MidFrameReset;
+				}
+				if (previousBowl.GetScore() + currentBowl.GetScore() >= SPARE)
+				{
+					return Action.FrameReset;
+				}
+				return Action.EndGame;
+			}
+			if (currentBowl.GetShotInFrame() == 0 && currentBowl.IsSpareOrStrike())
 			{
 				return Action.FrameReset;
 			}
-			return Action.EndGame;
-		}
-		
-		if( frameList.Count  == 19 && lastBowl == STRIKE) 
-		{
-			frameList.Add(0);
-			return Action.FrameReset;
-		}
-		
-		if (frameList.Count  % 2 == 0)
+		} 
+		else if (currentBowl.GetShotInFrame() == 1 || 
+		         (currentBowl.GetShotInFrame() == 0 && currentBowl.IsSpareOrStrike()))
 		{
 			return Action.EndTurn;
 		}
-		if (frameList.Count  % 2 != 0)
-		{
-			if (lastBowl == STRIKE)
-			{
-				frameList.Add(0);
-				return Action.EndTurn;
-			}
-
-			return Action.MidFrameReset;
-		} 
-		
-		throw new UnityException("Not sure what action to return!");
-		
+		return Action.MidFrameReset;			
 	}
+
+	private void SetShotCountAndFrameForCurrentBowl()
+	{
+		if ((previousBowl.GetShotInFrame() == 1 || previousBowl.IsSpareOrStrike()) 
+		    && previousBowl.GetFrame() != 9)
+		{
+			currentBowl.SetShotInFrame(0);
+			currentBowl.SetFrame(previousBowl.GetFrame() + 1);
+		}
+		else if (previousBowl.GetShotInFrame() == 0 && !previousBowl.IsSpareOrStrike())
+		{
+			currentBowl.SetShotInFrame(1);
+			currentBowl.SetFrame(previousBowl.GetFrame());
+		}
+		else
+		{
+			currentBowl.SetShotInFrame(previousBowl.GetShotInFrame() + 1);
+			currentBowl.SetFrame(previousBowl.GetFrame());
+		}
+	}
+
 
 }

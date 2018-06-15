@@ -5,7 +5,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
 
-	public List<int> FrameList = new List<int>();
+	public List<Bowl> BowlList = new List<Bowl>();
 	
 	private PinController _pinController;
 	private BowlingBall _ball;
@@ -27,9 +27,9 @@ public class GameManager : MonoBehaviour
 	
 	public int HandleEndBowl(int lastSettledCount, int standingCount)
 	{
-		FrameList.Add(lastSettledCount - standingCount);
-		_scoreManager.UpdateScore(FrameList);
-		var action = _actionMaster.Bowl(FrameList);
+		BowlList.Add(new Bowl(lastSettledCount - standingCount));
+		var action = _actionMaster.Bowl(BowlList);
+		_scoreManager.UpdateScore(BowlList);
 		
 		switch (action)
 		{
@@ -46,7 +46,10 @@ public class GameManager : MonoBehaviour
 				SetUpNextShot();
 				return TOTAL_PINS;
 			case ActionMaster.Action.EndGame:
-				FrameList.Clear();
+				_pinController.FrameReset();
+				BowlList.Clear();
+				ResetScoresInTime(5f);
+				SetUpNextShot(5f);
 				return TOTAL_PINS;
 			default:
 				throw new UnityException("Action not found");
@@ -59,6 +62,12 @@ public class GameManager : MonoBehaviour
 		Invoke("ResetCamera",cameraResetDelay);
 		Invoke("SetReadyToLaunchFlag", cameraResetDelay);
 	}
+	private void SetUpNextShot(float time)
+	{
+		_ball.ResetBall();
+		Invoke("ResetCamera",time);
+		Invoke("SetReadyToLaunchFlag", time);
+	}
 	
 	private void ResetCamera()
 	{
@@ -68,5 +77,15 @@ public class GameManager : MonoBehaviour
 	private void SetReadyToLaunchFlag()
 	{
 		_ball.SetReadyToLaunch();
+	}
+
+	private void ResetScores()
+	{
+		_scoreManager.ResetScores();
+	}
+
+	private void ResetScoresInTime(float time)
+	{
+		Invoke("ResetScoresInTime", time);
 	}
 }
