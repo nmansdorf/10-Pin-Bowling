@@ -1,16 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Concurrent;
+﻿
 using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Runtime.Remoting.Channels;
-using System.Security.Policy;
-using System.Xml;
-using System.Xml.Schema;
-using UnityEditor.Experimental.Build.Player;
 using UnityEngine;
-using UnityEngine.SocialPlatforms.Impl;
+
 
 public class ScoreManager : MonoBehaviour
 {
