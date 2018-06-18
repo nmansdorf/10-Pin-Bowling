@@ -31,7 +31,7 @@ public class ScoreManager : MonoBehaviour
 		Debug.Log("previousScore = " + previousScore);
 	}
 
-	public void CalculateTotalScore(List<Bowl> bowls)
+	private void CalculateTotalScore(List<Bowl> bowls)
 	{
 		var bowlsIndex = bowls.Count - 1;
 		var currentBowl = bowls[bowlsIndex];
