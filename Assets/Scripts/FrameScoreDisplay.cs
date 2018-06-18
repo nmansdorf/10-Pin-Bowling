@@ -99,7 +99,7 @@ public class FrameScoreDisplay : MonoBehaviour
 		{
 			Bowl3Score.text = "-";
 		}
-		else if (score2 != STRIKE && (score2 + score3 == STRIKE))
+		else if (score1 == STRIKE && score2 != STRIKE && (score2 + score3 == STRIKE))
 		{
 			Bowl3Score.text = "/";
 		}
