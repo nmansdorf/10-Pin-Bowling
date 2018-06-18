@@ -685,5 +685,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 478f2009130144a21acf8760f8ee2f61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _standingCountText: {fileID: 0}
-  _timeThreshold: 3
+  standingCountText: {fileID: 0}
+  timeThreshold: 4

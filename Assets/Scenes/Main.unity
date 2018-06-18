@@ -261,7 +261,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 114806644275908584, guid: 9bb930c645bf94d6d9934976836f83ac,
         type: 2}
-      propertyPath: _standingCountText
+      propertyPath: standingCountText
       value: 
       objectReference: {fileID: 1545770625}
     m_RemovedComponents: []
@@ -681,8 +681,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce052fd5842414d8b9b30f30703459e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FrameList: 
-  cameraResetDelay: 8
+  CameraResetDelay: 4
 --- !u!4 &1192205166
 Transform:
   m_ObjectHideFlags: 0

@@ -167,7 +167,7 @@ Rigidbody:
   m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 1
+  m_CollisionDetection: 2
 --- !u!64 &64210422170630106
 MeshCollider:
   m_ObjectHideFlags: 1
@@ -273,7 +273,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da3bc42506b86450dbe81ceb7c9b0df8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PinPositionThreshold: 0.03
+  PinPositionThreshold: 0.02
   RotationThreshold: 3
   PinTranslationRate: 0.04
   InitialPosition: {x: 0, y: 0.6, z: 0}

@@ -46,7 +46,11 @@ public class FrameScoreDisplay : MonoBehaviour
 	private void SetBowl1Score(int score)
 	{
 		score1 = score;
-		if(score == STRIKE && !TenthFrame)
+		if (score1 == 0)
+		{
+			Bowl1Score.text = "-";
+		}
+		else if(score == STRIKE && !TenthFrame)
 		{
 			Strike.gameObject.SetActive(true);
 			Strike.text = "X";
@@ -69,7 +73,11 @@ public class FrameScoreDisplay : MonoBehaviour
 	{
 		score2 = score;
 		Bowl2Score.gameObject.SetActive(true);
-		if (TenthFrame && score1 == STRIKE && score2 == STRIKE)
+		if (score2 == 0)
+		{
+			Bowl2Score.text = "-";
+		}
+		else if (TenthFrame && score1 == STRIKE && score2 == STRIKE)
 		{
 			Bowl2Score.text = "X";
 		}
@@ -87,7 +95,11 @@ public class FrameScoreDisplay : MonoBehaviour
 	{
 		score3 = score;
 		Bowl3Score.gameObject.SetActive(true);
-		if (score2 != STRIKE && (score2 + score3 == STRIKE))
+		if (score3 == 0)
+		{
+			Bowl3Score.text = "-";
+		}
+		else if (score2 != STRIKE && (score2 + score3 == STRIKE))
 		{
 			Bowl3Score.text = "/";
 		}
