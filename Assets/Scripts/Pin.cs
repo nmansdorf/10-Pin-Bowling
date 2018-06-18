@@ -93,7 +93,7 @@ public class Pin : MonoBehaviour
 	public IEnumerator MovePinUp()
 	{
 		_rigidbody.isKinematic = true;
-	
+		gameObject.transform.rotation = Quaternion.identity;
 
 		while (gameObject.transform.position.y <
 			   InitialPosition.y)

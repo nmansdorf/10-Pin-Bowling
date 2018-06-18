@@ -105,6 +105,7 @@ public class BowlingBall : MonoBehaviour
 	public void ResetBall()
 	{
 		transform.position = InitialPosition;
+		transform.rotation = Quaternion.identity;
 		_rigidbody.velocity = Vector3.zero;
 		_rigidbody.angularVelocity = Vector3.zero;
 		_rigidbody.useGravity = false;
