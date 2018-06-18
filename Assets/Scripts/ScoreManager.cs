@@ -107,6 +107,10 @@ public class ScoreManager : MonoBehaviour
 	{
 		unfinishedFrames.Clear();
 		scores.Clear();
+		foreach (var frameScoreDisplay in FrameScoreDisplays)
+		{
+			frameScoreDisplay.ResetScore();
+		}
 	}
 
 }
