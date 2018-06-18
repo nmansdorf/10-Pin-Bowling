@@ -12,25 +12,25 @@ public class Pin : MonoBehaviour
 	public float PinTranslationRate = .04f;
 	public Vector3 InitialPosition;
 	
-	private PinPosition _pinPosition;
-	private Rigidbody _rigidbody;
-	private AudioSource _audioSource;
-	private Vector3 _lastFramePosition;
+	private PinPosition pinPosition;
+	private Rigidbody pinRigidBody;
+	private AudioSource audioSource;
+	private Vector3 lastFramePosition;
 
 	private void Start()
 	{
-		_audioSource = gameObject.GetComponent<AudioSource>();
-		_rigidbody = gameObject.GetComponent<Rigidbody>();
+		audioSource = gameObject.GetComponent<AudioSource>();
+		pinRigidBody = gameObject.GetComponent<Rigidbody>();
 	}
 
 	public void SetPinPosition(PinPosition pinPosition)
 	{
-		_pinPosition = pinPosition;
+		this.pinPosition = pinPosition;
 	}
 
 	public Vector3 GetPinPosition()
 	{
-		return _pinPosition.GetPosition();
+		return pinPosition.GetPosition();
 	}
 	
 	public bool PinAtPinPosition()
@@ -60,7 +60,7 @@ public class Pin : MonoBehaviour
 	{
 		if (other.collider.gameObject.GetComponent<BowlingBall>() != null)
 		{
-			_audioSource.Play();
+			audioSource.Play();
 		}
 	}
 
@@ -87,12 +87,12 @@ public class Pin : MonoBehaviour
 			callback();
 		}
 
-		_rigidbody.isKinematic = false;
+		pinRigidBody.isKinematic = false;
 	}
 
 	public IEnumerator MovePinUp()
 	{
-		_rigidbody.isKinematic = true;
+		pinRigidBody.isKinematic = true;
 		gameObject.transform.rotation = Quaternion.identity;
 
 		while (gameObject.transform.position.y <

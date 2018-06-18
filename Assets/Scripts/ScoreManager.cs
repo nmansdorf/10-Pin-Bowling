@@ -7,9 +7,10 @@ public class ScoreManager : MonoBehaviour
 {
 
 	public List<FrameScoreDisplay> FrameScoreDisplays;
-	private List<int> _scores = new List<int>();
-	private List<UnfinishedFrame> _unfinishedFrames = new List<UnfinishedFrame>();
-	private int _previousScore = 0;
+	
+	private List<int> scores = new List<int>();
+	private List<UnfinishedFrame> unfinishedFrames = new List<UnfinishedFrame>();
+	private int previousScore = 0;
 
 	public void UpdateScore(List<Bowl> bowlList)
 	{
@@ -23,11 +24,11 @@ public class ScoreManager : MonoBehaviour
 
 		CalculateTotalScore(bowlList);
 		
-		if (_scores.Count > 0)
+		if (scores.Count > 0)
 		{
 			SetTotalScores();
 		}
-		Debug.Log("previousScore = " + _previousScore);
+		Debug.Log("previousScore = " + previousScore);
 	}
 
 	public void CalculateTotalScore(List<Bowl> bowls)
@@ -39,7 +40,7 @@ public class ScoreManager : MonoBehaviour
 		if (currentBowl.GetShotInFrame() == 0 && currentBowl.IsSpareOrStrike())
 		{
 			CheckForFinishedScores(bowls);
-			_unfinishedFrames.Add(new UnfinishedFrame(2, bowlsIndex));
+			unfinishedFrames.Add(new UnfinishedFrame(2, bowlsIndex));
 		}
 		else if (currentBowl.GetShotInFrame() == 1)
 		{
@@ -49,16 +50,16 @@ public class ScoreManager : MonoBehaviour
 			if (previousBowl.GetScore() + currentBowl.GetScore() == 10)
 			{
 				CheckForFinishedScores(bowls);
-				_unfinishedFrames.Add(new UnfinishedFrame(1, bowlsIndex));
+				unfinishedFrames.Add(new UnfinishedFrame(1, bowlsIndex));
 			}
 			else
 			{
 				//no strike or spare
 				CheckForFinishedScores(bowls);
-				var score = _previousScore + currentBowl.GetScore() + previousBowl.GetScore();
-				_scores.Add(score);
-				_previousScore = score;
-				_unfinishedFrames.Add(new UnfinishedFrame(0, bowlsIndex));
+				var score = previousScore + currentBowl.GetScore() + previousBowl.GetScore();
+				scores.Add(score);
+				previousScore = score;
+				unfinishedFrames.Add(new UnfinishedFrame(0, bowlsIndex));
 			}
 		}
 		CheckForFinishedScores(bowls);
@@ -66,9 +67,9 @@ public class ScoreManager : MonoBehaviour
 
 	private void CheckForFinishedScores(List<Bowl> bowls)
 	{
-		for (int i = 0; i < _unfinishedFrames.Count; i++)
+		for (int i = 0; i < unfinishedFrames.Count; i++)
 		{
-			var unfinishedFrame = _unfinishedFrames[i];
+			var unfinishedFrame = unfinishedFrames[i];
 			if (unfinishedFrame.AdditionalBowls != 0)
 			{
 				var score = 0;
@@ -82,9 +83,9 @@ public class ScoreManager : MonoBehaviour
 						score += bowls[bowlIndex + j + 1].GetScore();
 					}
 
-					score += _previousScore;
-					_scores.Add(score);
-					_previousScore = score;
+					score += previousScore;
+					scores.Add(score);
+					previousScore = score;
 					unfinishedFrame.AdditionalBowls = 0;
 				}
 			}
@@ -93,19 +94,19 @@ public class ScoreManager : MonoBehaviour
 
 	private void SetTotalScores()
 	{
-		for (int i = 0; i < _scores.Count; i++)
+		for (int i = 0; i < scores.Count; i++)
 		{
-			if (_unfinishedFrames[i].AdditionalBowls == 0)
+			if (unfinishedFrames[i].AdditionalBowls == 0)
 			{
-				FrameScoreDisplays[i].SetTotalScore(_scores[i]);
+				FrameScoreDisplays[i].SetTotalScore(scores[i]);
 			}
 		}
 	}
 
 	public void ResetScores()
 	{
-		_unfinishedFrames.Clear();
-		_scores.Clear();
+		unfinishedFrames.Clear();
+		scores.Clear();
 	}
 
 }

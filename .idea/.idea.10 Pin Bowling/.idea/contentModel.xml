@@ -30,7 +30,6 @@
           <e p="PinController.cs" t="Include" />
           <e p="PinCounterBox.cs" t="Include" />
           <e p="PinPosition.cs" t="Include" />
-          <e p="PinStateMachine.cs" t="Include" />
           <e p="ScoreManager.cs" t="Include" />
           <e p="Swiper.cs" t="Include" />
           <e p="UnfinishedFrame.cs" t="Include" />

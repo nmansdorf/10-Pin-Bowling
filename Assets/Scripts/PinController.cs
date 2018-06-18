@@ -6,19 +6,19 @@ public class PinController : MonoBehaviour
 {
 
 	public Pin PinPrefab;
-	private PinPosition[] _pinPositions;
-	private List<Pin> _pins;
-	private Animator _anim;
-	private BowlingBall _ball;
+	private PinPosition[] pinPositions;
+	private List<Pin> pins;
+	private Animator anim;
+	private BowlingBall ball;
 	
 	
 	// Use this for initialization
 	private void Start ()
 	{
-		_ball = FindObjectOfType<BowlingBall>();
-		_pinPositions = GetComponentsInChildren <PinPosition>();
-		_pins = new List<Pin>();
-		_anim = GetComponent<Animator>();
+		ball = FindObjectOfType<BowlingBall>();
+		pinPositions = GetComponentsInChildren <PinPosition>();
+		pins = new List<Pin>();
+		anim = GetComponent<Animator>();
 	
 		SpawnPins();
 		LowerPins();
@@ -27,28 +27,28 @@ public class PinController : MonoBehaviour
 
 	private void CleanUpAllPins()
 	{
-		for (var i = 0; i< _pins.Count;)
+		for (var i = 0; i< pins.Count;)
 		{
-			if (_pins[i] != null)
+			if (pins[i] != null)
 			{
-				Destroy(_pins[i].gameObject);
+				Destroy(pins[i].gameObject);
 			}
-			_pins.RemoveAt(i);
+			pins.RemoveAt(i);
 		}
 	}
 
 	private void CleanUpHitPins()
 	{
-		for(var i = 0; i<_pins.Count; )
+		for(var i = 0; i<pins.Count; )
 		{
-			if (_pins[i] == null)
+			if (pins[i] == null)
 			{
-				_pins.RemoveAt(i);
+				pins.RemoveAt(i);
 			}
-			else if(!_pins[i].PinAtPinPosition())
+			else if(!pins[i].PinAtPinPosition())
 			{
-				Destroy(_pins[i].gameObject);
-				_pins.RemoveAt(i);
+				Destroy(pins[i].gameObject);
+				pins.RemoveAt(i);
 			}
 			else
 			{
@@ -59,30 +59,30 @@ public class PinController : MonoBehaviour
 
 	private void SpawnPins()
 	{
-		foreach (var pinPosition in _pinPositions)
+		foreach (var pinPosition in pinPositions)
 		{
 			var pin = Instantiate(PinPrefab, pinPosition.transform);
 			pin.SetPinPosition(pinPosition);
 			pin.transform.position = pin.GetPinPosition() + pin.InitialPosition;
-			_pins.Add(pin);
+			pins.Add(pin);
 		}
 	}
 
 
 	private void LowerPins()
 	{
-		foreach (var pin in _pins)
+		foreach (var pin in pins)
 		{
 			if (pin != null)
 			{
-				StartCoroutine(pin.MovePinDown(_ball.SetReadyToLaunch));
+				StartCoroutine(pin.MovePinDown(ball.SetReadyToLaunch));
 			}
 		}
 	}
 
 	private void RaisePins()
 	{	
-		foreach (var pin in _pins)
+		foreach (var pin in pins)
 		{
 			if (pin != null && pin.IsPinSet())
 			{
@@ -93,12 +93,12 @@ public class PinController : MonoBehaviour
 
 	public void FrameReset()
 	{
-		_anim.SetTrigger("ResetTrigger");
+		anim.SetTrigger("ResetTrigger");
 	}
 
 	public void MidFrameReset()
 	{
-		_anim.SetTrigger("MidFrameTrigger");
+		anim.SetTrigger("MidFrameTrigger");
 	}
 
 }

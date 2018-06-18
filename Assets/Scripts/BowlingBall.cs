@@ -15,34 +15,34 @@ public class BowlingBall : MonoBehaviour
 	public Vector3 InitialPosition;
 	public float TranslationCoefficient;
 
-	private bool _isMoving;
-	private Rigidbody _rigidbody;
-	private AudioSource _audioSource;
-	private string _translationDirection;
+	private bool isMoving;
+	private Rigidbody ballRigidbody;
+	private AudioSource audioSource;
+	private string translationDirection;
 	private const float LANE_BOUNDS = 0.45f;
 	private Vector3 GUTTERBALL_BOUNDS = new Vector3(1, -1, 27);
-	private bool _readyToLaunch;
-	private bool _hasLaunched;
-	private bool _ballEnteredBox;
+	private bool readyToLaunch;
+	private bool hasLaunched;
+	private bool ballEnteredBox;
 
 
 
 
 	void Start()
 	{
-		_rigidbody = GetComponent<Rigidbody>();
-		_audioSource = GetComponent<AudioSource>();
-		_rigidbody.useGravity = false;
+		ballRigidbody = GetComponent<Rigidbody>();
+		audioSource = GetComponent<AudioSource>();
+		ballRigidbody.useGravity = false;
 	}
 
 	private void Update()
 	{
 
-		if (_translationDirection == "right")
+		if (translationDirection == "right")
 		{
 			TranslateBall(Vector3.right);
 		}
-		else if (_translationDirection == "left")
+		else if (translationDirection == "left")
 		{
 			TranslateBall(Vector3.left);
 		}
@@ -52,20 +52,20 @@ public class BowlingBall : MonoBehaviour
 
 	public void Launch(Vector3 launchVelocity)
 	{
-		if (_rigidbody != null && !_isMoving && _readyToLaunch)
+		if (ballRigidbody != null && !isMoving && readyToLaunch)
 		{
-			_rigidbody.useGravity = true;
-			_rigidbody.velocity = launchVelocity;
-			_audioSource.Play();
-			_isMoving = true;
-			_readyToLaunch = false;
-			_hasLaunched = true;
+			ballRigidbody.useGravity = true;
+			ballRigidbody.velocity = launchVelocity;
+			audioSource.Play();
+			isMoving = true;
+			readyToLaunch = false;
+			hasLaunched = true;
 		}
 	}
 	
 	public bool HasLaunched()
 	{
-		return _hasLaunched;
+		return hasLaunched;
 	}
 	
 	public void DebugLaunch()
@@ -75,23 +75,23 @@ public class BowlingBall : MonoBehaviour
 
 	public void SetReadyToLaunch( )
 	{
-		_readyToLaunch = true;
-		_hasLaunched = false;
+		readyToLaunch = true;
+		hasLaunched = false;
 	}
 
 	public bool ReadyToLaunch()
 	{
-		return _readyToLaunch;
+		return readyToLaunch;
 	}
 
 	public bool IsMoving()
 	{
-		if (_rigidbody.velocity == Vector3.zero)
+		if (ballRigidbody.velocity == Vector3.zero)
 		{
-			_isMoving = false;
+			isMoving = false;
 		}
 
-		return _isMoving;
+		return isMoving;
 	}
 
 	public bool IsOffLane()
@@ -106,17 +106,17 @@ public class BowlingBall : MonoBehaviour
 	{
 		transform.position = InitialPosition;
 		transform.rotation = Quaternion.identity;
-		_rigidbody.velocity = Vector3.zero;
-		_rigidbody.angularVelocity = Vector3.zero;
-		_rigidbody.useGravity = false;
-		_isMoving = false;
-		_ballEnteredBox = false;
+		ballRigidbody.velocity = Vector3.zero;
+		ballRigidbody.angularVelocity = Vector3.zero;
+		ballRigidbody.useGravity = false;
+		isMoving = false;
+		ballEnteredBox = false;
 	}
 
 	private void TranslateBall(Vector3 direction)
 	{
 		var position = gameObject.transform.position;
-		if(!_isMoving)
+		if(!isMoving)
 		{
 			position += direction * TranslationCoefficient;
 			if (position.x >= LANE_BOUNDS)
@@ -133,19 +133,19 @@ public class BowlingBall : MonoBehaviour
 
 	public bool IsInBox()
 	{
-		return _ballEnteredBox;
+		return ballEnteredBox;
 	}
 
 	public void TranslateDirection(string direction)
 	{
-		_translationDirection = direction;
+		translationDirection = direction;
 	}
 
 	private void OnTriggerEnter(Collider other)
 	{
 		if (other.gameObject.GetComponent<PinCounterBox>() != null)
 		{
-			_ballEnteredBox = true;
+			ballEnteredBox = true;
 		}
 	}
 }

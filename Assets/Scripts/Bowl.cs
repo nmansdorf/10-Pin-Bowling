@@ -4,42 +4,42 @@ using UnityEngine.SocialPlatforms.Impl;
 
 public class Bowl
 {
-    private int Score;
-    private int Frame;
-    private int ShotInFrame;
+    private int score;
+    private int frame;
+    private int shotInFrame;
 
     public  Bowl(int score)
     {
-        Score = score;
-        Frame = 0;
-        ShotInFrame = 0;
+        this.score = score;
+        frame = 0;
+        shotInFrame = 0;
     }
 
     public bool IsSpareOrStrike()
     {
-        return (Score == 10);
+        return (score == 10);
     }
 
     public int GetScore()
     {
-        return Score;
+        return score;
     }
 
     public int GetFrame()
     {
-        return Frame;
+        return frame;
     }
 
     public int GetShotInFrame()
     {
-        return ShotInFrame;
+        return shotInFrame;
     }
 
     public void SetShotInFrame(int shot)
     {
-        if(shot >= 0 && (Frame < 9 && shot <= 2 || Frame == 9 && shot <= 3))
+        if(shot >= 0 && (frame < 9 && shot <= 2 || frame == 9 && shot <= 3))
         {
-            ShotInFrame = shot;
+            shotInFrame = shot;
         }
         else
         {
@@ -47,11 +47,11 @@ public class Bowl
         }
     }
 
-    public void SetFrame(int frame)
+    public void SetFrame(int frameCount)
     {
-        if (frame >= 0 && frame <= 9)
+        if (frameCount >= 0 && frameCount <= 9)
         {
-            Frame = frame;
+            frame = frameCount;
         }
         else
         {
@@ -61,6 +61,6 @@ public class Bowl
 
     public bool IsLastFrame()
     {
-        return (Frame == 9);
+        return (frame == 9);
     }
 }

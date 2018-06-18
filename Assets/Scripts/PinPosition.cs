@@ -5,15 +5,15 @@ using UnityEngine;
 public class PinPosition : MonoBehaviour
 {
 
-	private Vector3 _position;
+	private Vector3 position;
 
 	private void Start()
 	{
-		_position = transform.position;
+		position = transform.position;
 	}
 
 	public Vector3 GetPosition()
 	{
-		return _position;
+		return position;
 	}
 }

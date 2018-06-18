@@ -5,36 +5,36 @@ using UnityEngine.UI;
 
 public class PinCounterBox : MonoBehaviour
 {
-    public Text _standingCountText;
-    public float _timeThreshold;
+    public Text standingCountText;
+    public float timeThreshold;
 
-    private BowlingBall _ball;
-    private GameManager _gameManager;
-    private int _standingCount;
-    private int _previousCount = -1;
-    private int _lastSettledCount;
-    private float _lastMoved;
-    private float _timeSinceMovement;
-    private bool _ballInBox;
+    private BowlingBall ball;
+    private GameManager gameManager;
+    private int standingCount;
+    private int previousCount = -1;
+    private int lastSettledCount;
+    private float lastMoved;
+    private float timeSinceMovement;
+    private bool ballInBox;
     
     
 
     private void Start()
     {
-        _gameManager = FindObjectOfType<GameManager>();
-        _ball = FindObjectOfType<BowlingBall>();
-        _lastSettledCount = 10;
+        gameManager = FindObjectOfType<GameManager>();
+        ball = FindObjectOfType<BowlingBall>();
+        lastSettledCount = 10;
                 
     }
 
     private void Update()
     {
         UpdateStandingCount();
-        if (_ballInBox || _ball.IsOffLane())
+        if (ballInBox || ball.IsOffLane())
         {
-            if (_lastMoved == 0f)
+            if (lastMoved == 0f)
             {
-                _lastMoved = Time.time;
+                lastMoved = Time.time;
             }
             UpdateLastMovedTime();
         }
@@ -45,7 +45,7 @@ public class PinCounterBox : MonoBehaviour
     {
         if (other.gameObject.GetComponent<BowlingBall>() != null)
         {
-            _ballInBox = true;
+            ballInBox = true;
         }
     }
 
@@ -64,22 +64,22 @@ public class PinCounterBox : MonoBehaviour
             }
         }
 
-        _standingCount = standingCount;
-        if (_standingCountText != null)
-            _standingCountText.text = _standingCount.ToString();
+        this.standingCount = standingCount;
+        if (standingCountText != null)
+            standingCountText.text = this.standingCount.ToString();
     }
     
     private void UpdateLastMovedTime()
     {	
-        if (_previousCount != _standingCount)
+        if (previousCount != standingCount)
         {	
-            _lastMoved = Time.time;
-            _previousCount = _standingCount;
+            lastMoved = Time.time;
+            previousCount = standingCount;
         }
         else
         {
-            _timeSinceMovement = Time.time - _lastMoved;
-            if (_timeSinceMovement >= _timeThreshold)
+            timeSinceMovement = Time.time - lastMoved;
+            if (timeSinceMovement >= timeThreshold)
             {
                 PinsHaveSettled();
             }
@@ -89,8 +89,8 @@ public class PinCounterBox : MonoBehaviour
     
     private void PinsHaveSettled()
     {
-            _previousCount = -1;	
-            _lastSettledCount = _gameManager.HandleEndBowl(_lastSettledCount, _standingCount);
-            _ballInBox = false;
+            previousCount = -1;	
+            lastSettledCount = gameManager.HandleEndBowl(lastSettledCount, standingCount);
+            ballInBox = false;
     }
 }

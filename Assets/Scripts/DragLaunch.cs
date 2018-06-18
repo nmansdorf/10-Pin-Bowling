@@ -14,11 +14,11 @@ public class DragLaunch : MonoBehaviour
 	private float timeEnd;
 	private Vector2 startPosition;
 	private Vector2 endPosition;
-	private BowlingBall _ball;
+	private BowlingBall ball;
 	// Use this for initialization
 	void Start ()
 	{
-		_ball = GetComponent<BowlingBall>();
+		ball = GetComponent<BowlingBall>();
 	}
 
 	public void DragStart()
@@ -37,6 +37,6 @@ public class DragLaunch : MonoBehaviour
 		
 		var launchVelocity = new Vector3((endPosition.x - startPosition.x)/(timeDelta * ScalingFactor), 0 , (endPosition.y -  startPosition.y)/(timeDelta * ScalingFactor));
 		
-		_ball.Launch(launchVelocity);
+		ball.Launch(launchVelocity);
 	}
 }
