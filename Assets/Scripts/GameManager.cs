@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour
 		_ball = FindObjectOfType<BowlingBall>();
 		_mCameraControl = FindObjectOfType<CameraControl>();
 		_scoreManager = FindObjectOfType<ScoreManager>();
+		BowlList.Clear();
 
 	}
 	

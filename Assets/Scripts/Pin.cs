@@ -37,7 +37,6 @@ public class Pin : MonoBehaviour
 	{
 		var pinPosition = GetPinPosition();
 		var pinCurrentPosition = transform.position;
-
 		return (Mathf.Abs(pinPosition.x - pinCurrentPosition.x) <= PinPositionThreshold &&
 		        Mathf.Abs(pinPosition.z - pinCurrentPosition.z) <= PinPositionThreshold);
 	}
@@ -45,8 +44,8 @@ public class Pin : MonoBehaviour
 	public bool IsStanding()
 	{
 		Vector3 rotationInEulerAngles = transform.rotation.eulerAngles;
-		bool withinTiltInXThresholds = (Mathf.Abs(rotationInEulerAngles.x) > RotationThreshold) || (Mathf.Abs(rotationInEulerAngles.x) < 360 - RotationThreshold);
-		bool withinTiltInZThresholds = (Mathf.Abs(rotationInEulerAngles.z) > RotationThreshold) || (Mathf.Abs(rotationInEulerAngles.z) < 360 - RotationThreshold);
+		bool withinTiltInXThresholds = (Mathf.Abs(rotationInEulerAngles.x) < RotationThreshold || Mathf.Abs(rotationInEulerAngles.x) > (360 - RotationThreshold));
+		bool withinTiltInZThresholds = (Mathf.Abs(rotationInEulerAngles.z) < RotationThreshold || Mathf.Abs(rotationInEulerAngles.z) > (360 - RotationThreshold));
 		return (withinTiltInXThresholds && withinTiltInZThresholds);
 		
 	}
