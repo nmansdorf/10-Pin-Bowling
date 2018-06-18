@@ -10,7 +10,6 @@
       <e p="Assets" t="Include">
         <e p="Editor" t="Include">
           <e p="ActionMasterTest.cs" t="Include" />
-          <e p="OurScoreDisplayTest1.cs" t="Include" />
         </e>
         <e p="Plugins" t="Include">
           <e p="Editor" t="Include">
@@ -21,7 +20,6 @@
         </e>
         <e p="Scripts" t="Include">
           <e p="ActionMaster.cs" t="Include" />
-          <e p="ActionMaster2.cs" t="Include" />
           <e p="Bowl.cs" t="Include" />
           <e p="BowlingBall.cs" t="Include" />
           <e p="CameraControl.cs" t="Include" />
