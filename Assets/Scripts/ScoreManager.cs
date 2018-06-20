@@ -11,11 +11,14 @@ public class ScoreManager : MonoBehaviour
 	private List<int> scores = new List<int>();
 	private List<UnfinishedFrame> unfinishedFrames = new List<UnfinishedFrame>();
 	private int previousScore = 0;
+	private int bowlIndex;
+	private Bowl currentBowl;
+
 
 	public void UpdateScore(List<Bowl> bowlList)
 	{
-		var currentBowlIndex = bowlList.Count - 1;
-		var currentBowl = bowlList[currentBowlIndex];
+		bowlIndex = bowlList.Count - 1;
+		currentBowl = bowlList[bowlIndex];
 		
 		var frame = currentBowl.GetFrame();
 	
@@ -32,24 +35,23 @@ public class ScoreManager : MonoBehaviour
 
 	private void CalculateTotalScore(List<Bowl> bowls)
 	{
-		var bowlsIndex = bowls.Count - 1;
-		var currentBowl = bowls[bowlsIndex];
+		
 
 		//strike
 		if (currentBowl.GetShotInFrame() == 0 && currentBowl.IsSpareOrStrike())
 		{
 			CheckForFinishedScores(bowls);
-			unfinishedFrames.Add(new UnfinishedFrame(2, bowlsIndex));
+			unfinishedFrames.Add(new UnfinishedFrame(2, bowlIndex));
 		}
 		else if (currentBowl.GetShotInFrame() == 1)
 		{
-			var previousBowl = bowls[bowlsIndex - 1];
+			var previousBowl = bowls[bowlIndex - 1];
 			
 			//spare
 			if (previousBowl.GetScore() + currentBowl.GetScore() == 10)
 			{
 				CheckForFinishedScores(bowls);
-				unfinishedFrames.Add(new UnfinishedFrame(1, bowlsIndex));
+				unfinishedFrames.Add(new UnfinishedFrame(1, bowlIndex));
 			}
 			else
 			{
@@ -58,7 +60,7 @@ public class ScoreManager : MonoBehaviour
 				var score = previousScore + currentBowl.GetScore() + previousBowl.GetScore();
 				scores.Add(score);
 				previousScore = score;
-				unfinishedFrames.Add(new UnfinishedFrame(0, bowlsIndex));
+				unfinishedFrames.Add(new UnfinishedFrame(0, bowlIndex));
 			}
 		}
 		CheckForFinishedScores(bowls);
@@ -71,12 +73,12 @@ public class ScoreManager : MonoBehaviour
 			var unfinishedFrame = unfinishedFrames[i];
 			if (unfinishedFrame.AdditionalBowls != 0)
 			{
-				var score = 0;
+	
 				var extraBowls = unfinishedFrame.AdditionalBowls;
 				var bowlIndex = unfinishedFrame.BowlIndex;
 				if (unfinishedFrame.BowlIndex + extraBowls < bowls.Count)
 				{
-					score = 10;
+					var score = 10;
 					for (int j = 0; j < extraBowls; j++)
 					{
 						score += bowls[bowlIndex + j + 1].GetScore();
