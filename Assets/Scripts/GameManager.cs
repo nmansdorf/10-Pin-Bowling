@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
 	public List<Bowl> BowlList = new List<Bowl>();
 	public float CameraResetDelay = 4f;
 	
-	private PinController pinController;
+	private PinsController pinsController;
 	private BowlingBall ball;
 	private ActionMaster actionMaster = new ActionMaster();
 	private CameraControl mCameraControl;
@@ -18,12 +18,10 @@ public class GameManager : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-		pinController = FindObjectOfType<PinController>();
+		pinsController = FindObjectOfType<PinsController>();
 		ball = FindObjectOfType<BowlingBall>();
 		mCameraControl = FindObjectOfType<CameraControl>();
 		scoreManager = FindObjectOfType<ScoreManager>();
-		BowlList.Clear();
-
 	}
 	
 	public int HandleEndBowl(int lastSettledCount, int standingCount)
@@ -35,19 +33,19 @@ public class GameManager : MonoBehaviour
 		switch (action)
 		{
 			case ActionMaster.Action.MidFrameReset:
-				pinController.MidFrameReset();
+				pinsController.MidFrameReset();
 				SetUpNextShot();
 				return standingCount;
 			case ActionMaster.Action.FrameReset:
-				pinController.FrameReset();
+				pinsController.FrameReset();
 				SetUpNextShot();
 				return TOTAL_PINS;
 			case ActionMaster.Action.EndTurn:
-				pinController.FrameReset();
+				pinsController.FrameReset();
 				SetUpNextShot();
 				return TOTAL_PINS;
 			case ActionMaster.Action.EndGame:
-				pinController.FrameReset();
+				pinsController.FrameReset();
 				BowlList.Clear();
 				ResetScoresInTime(5f);
 				SetUpNextShot(5f);
@@ -87,6 +85,6 @@ public class GameManager : MonoBehaviour
 
 	private void ResetScoresInTime(float time)
 	{
-		Invoke("ResetScoresInTime", time);
+		Invoke("ResetScores", time);
 	}
 }

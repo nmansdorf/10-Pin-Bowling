@@ -11,34 +11,25 @@ public class Pin : MonoBehaviour
 	public float RotationThreshold = 3f;
 	public float PinTranslationRate = .04f;
 	public Vector3 InitialPosition;
+	public PinPosition pinPosition { get; set; }
 	
-	private PinPosition pinPosition;
 	private Rigidbody pinRigidBody;
 	private AudioSource audioSource;
-	private Vector3 lastFramePosition;
 
+	
+	
 	private void Start()
 	{
 		audioSource = gameObject.GetComponent<AudioSource>();
 		pinRigidBody = gameObject.GetComponent<Rigidbody>();
 	}
-
-	public void SetPinPosition(PinPosition pinPosition)
-	{
-		this.pinPosition = pinPosition;
-	}
-
-	public Vector3 GetPinPosition()
-	{
-		return pinPosition.GetPosition();
-	}
 	
 	public bool PinAtPinPosition()
 	{
-		var pinPosition = GetPinPosition();
+		var position = pinPosition.GetPosition();
 		var pinCurrentPosition = transform.position;
-		return (Mathf.Abs(pinPosition.x - pinCurrentPosition.x) <= PinPositionThreshold &&
-		        Mathf.Abs(pinPosition.z - pinCurrentPosition.z) <= PinPositionThreshold);
+		return (Mathf.Abs(position.x - pinCurrentPosition.x) <= PinPositionThreshold &&
+		        Mathf.Abs(position.z - pinCurrentPosition.z) <= PinPositionThreshold);
 	}
 
 	public bool IsStanding()
@@ -52,7 +43,7 @@ public class Pin : MonoBehaviour
 
 	public bool IsPinSet()
 	{
-		return (PinAtPinPosition() && IsStanding());
+		return (IsStanding());
 		
 	}
 
@@ -76,12 +67,13 @@ public class Pin : MonoBehaviour
 	public IEnumerator MovePinDown(Action callback = null)
 	{
 		
-		while(gameObject.transform.position.y > GetPinPosition().y + .01f)
+		while(gameObject.transform.position.y > pinPosition.GetPosition().y + .01f)
 		{
 			gameObject.transform.position += Vector3.down * PinTranslationRate;
 			yield return new WaitForSeconds(.05f);
 		}
-
+		
+		//callback allows me to know when the pins have completed their movement
 		if (callback != null)
 		{
 			callback();

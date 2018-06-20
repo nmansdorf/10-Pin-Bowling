@@ -2,7 +2,7 @@
 using UnityEngine;
 
 
-public class PinController : MonoBehaviour
+public class PinsController : MonoBehaviour
 {
 
 	public Pin PinPrefab;
@@ -12,7 +12,6 @@ public class PinController : MonoBehaviour
 	private BowlingBall ball;
 	
 	
-	// Use this for initialization
 	private void Start ()
 	{
 		ball = FindObjectOfType<BowlingBall>();
@@ -45,7 +44,7 @@ public class PinController : MonoBehaviour
 			{
 				pins.RemoveAt(i);
 			}
-			else if(!pins[i].PinAtPinPosition())
+			else if(!pins[i].IsPinSet())
 			{
 				Destroy(pins[i].gameObject);
 				pins.RemoveAt(i);
@@ -62,8 +61,8 @@ public class PinController : MonoBehaviour
 		foreach (var pinPosition in pinPositions)
 		{
 			var pin = Instantiate(PinPrefab, pinPosition.transform);
-			pin.SetPinPosition(pinPosition);
-			pin.transform.position = pin.GetPinPosition() + pin.InitialPosition;
+			pin.pinPosition = pinPosition;
+			pin.transform.position = pin.pinPosition.GetPosition() + pin.InitialPosition;
 			pins.Add(pin);
 		}
 	}

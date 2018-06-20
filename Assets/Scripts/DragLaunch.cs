@@ -35,7 +35,11 @@ public class DragLaunch : MonoBehaviour
 		
 		float timeDelta = timeEnd - timeStart;
 		
-		var launchVelocity = new Vector3((endPosition.x - startPosition.x)/(timeDelta * ScalingFactor), 0 , (endPosition.y -  startPosition.y)/(timeDelta * ScalingFactor));
+		var x = (endPosition.x - startPosition.x) / (timeDelta * ScalingFactor);
+		var y = 0;
+		var z = (endPosition.y -  startPosition.y)/(timeDelta * ScalingFactor);
+		
+		var launchVelocity = new Vector3(x,y,z);
 		
 		ball.Launch(launchVelocity);
 	}

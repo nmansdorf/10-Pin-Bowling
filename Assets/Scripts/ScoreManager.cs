@@ -20,7 +20,7 @@ public class ScoreManager : MonoBehaviour
 		var frame = currentBowl.GetFrame();
 	
 		//Update the proper display with a subscore from the last bowl
-		FrameScoreDisplays[frame].SetScore(currentBowl.GetScore());
+		FrameScoreDisplays[frame].SetRollScore(currentBowl.GetScore());
 
 		CalculateTotalScore(bowlList);
 		
@@ -28,7 +28,6 @@ public class ScoreManager : MonoBehaviour
 		{
 			SetTotalScores();
 		}
-		Debug.Log("previousScore = " + previousScore);
 	}
 
 	private void CalculateTotalScore(List<Bowl> bowls)
@@ -98,7 +97,7 @@ public class ScoreManager : MonoBehaviour
 		{
 			if (unfinishedFrames[i].AdditionalBowls == 0)
 			{
-				FrameScoreDisplays[i].SetTotalScore(scores[i]);
+				FrameScoreDisplays[i].SetFrameScore(scores[i]);
 			}
 		}
 	}
