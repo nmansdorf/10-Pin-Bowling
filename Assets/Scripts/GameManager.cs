@@ -33,26 +33,40 @@ public class GameManager : MonoBehaviour
 		switch (action)
 		{
 			case ActionMaster.Action.MidFrameReset:
-				pinsController.MidFrameReset();
-				SetUpNextShot();
+				EndRoll();
 				return standingCount;
 			case ActionMaster.Action.FrameReset:
-				pinsController.FrameReset();
-				SetUpNextShot();
+				EndFrame();
 				return TOTAL_PINS;
 			case ActionMaster.Action.EndTurn:
-				pinsController.FrameReset();
-				SetUpNextShot();
+				EndFrame();
 				return TOTAL_PINS;
 			case ActionMaster.Action.EndGame:
-				pinsController.FrameReset();
-				BowlList.Clear();
-				ResetScoresInTime(5f);
-				SetUpNextShot(5f);
+				EndGame();
 				return TOTAL_PINS;
 			default:
 				throw new UnityException("Action not found");
 		}
+	}
+
+	private void EndGame()
+	{
+		pinsController.FrameReset();
+		BowlList.Clear();
+		ResetScoresInTime(5f);
+		SetUpNextShot(5f);
+	}
+
+	private void EndFrame()
+	{
+		pinsController.FrameReset();
+		SetUpNextShot();
+	}
+
+	private void EndRoll()
+	{
+		pinsController.MidFrameReset();
+		SetUpNextShot();
 	}
 
 	private void SetUpNextShot()

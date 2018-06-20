@@ -59,13 +59,19 @@ public class FrameScoreDisplay : MonoBehaviour
 		}
 		else if(score == 10) 				//Strike
 		{
-			text.text = "X";
+			if (TenthFrame)				
+			{
+				text.text = "X";
+			}
+			else
+			{
+				Strike.text = "X";			//Strike on not 10th frame takes up whole roll box
+			}	
 		}
 		else 								//Open Frame
 		{
 			text.text = score.ToString();	
 		}
-
 		previousScore = score;
 	}
 
