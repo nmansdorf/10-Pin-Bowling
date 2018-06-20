@@ -46,16 +46,13 @@ public class FrameScoreDisplay : MonoBehaviour
 
 	private void SetRollScoreText(int score, Text text)
 	{
-		text.gameObject.SetActive(true);
 		if (score == 0)
 		{
 			text.text = "-";
-			
 		}
 		else if (score + previousScore == 10) //Spare
 		{
 			text.text = "/";
-			
 		}
 		else if(score == 10) 				//Strike
 		{
@@ -65,13 +62,15 @@ public class FrameScoreDisplay : MonoBehaviour
 			}
 			else
 			{
-				Strike.text = "X";			//Strike on not 10th frame takes up whole roll box
+				text = Strike;    //Strike on not 10th frame takes up whole roll box
+				text.text = "X";			
 			}	
 		}
 		else 								//Open Frame
 		{
 			text.text = score.ToString();	
 		}
+		text.gameObject.SetActive(true);
 		previousScore = score;
 	}
 
