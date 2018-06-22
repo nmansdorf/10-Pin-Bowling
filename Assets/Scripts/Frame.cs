@@ -19,26 +19,26 @@ public class Frame
     private const int SpareScoreRolls = 1;
     
     //frame variables
-    private int frameNumber;
+    public readonly int frameNumber;
     private int totalRollsIndex; //index of the last roll in the frame relative to total rolls
-    private bool tenthFrame;
+    private bool lastFrame;
     private List<int> rolls = new List<int>();
 
-    public void Frames(int roll)
+    public Frame(int roll)
     {
+        FrameList.Add(this);
         frameNumber = FrameList.Count;
         if (frameNumber == TotalFrames)
         {
-            tenthFrame = true;
+            lastFrame = true;
         }
         rolls.Add(roll);
         totalRollsIndex = TotalRolls.Count;
         TotalRolls.Add(roll);
-        FrameList.Add(this);
-        UpdateFrameScores();
+        UpdateCumulativeFrameScores();
     }
 
-    private void UpdateFrameScores()
+    private void UpdateCumulativeFrameScores()
     {
         FrameScores.Clear();
         for (int i = 0; i < FrameList.Count; i++)
@@ -59,16 +59,23 @@ public class Frame
         }
     }
 
+    public List<int> GetRolls()
+    {
+        return rolls;
+    }
+
     public bool IsFrameComplete()
     {
         //last frame
-        if (tenthFrame)
+        if (lastFrame)
         {
             //no extra bowl in last frame
-            if (!ExtraBowlAwarded())
+            if (rolls.Count >= MaxRollsPerFrame && !ExtraBowlAwarded())
             {
+               
                 return true;
             }
+            
             return (rolls.Count >= MaxRollsInFinalFrame);
         } 
         
@@ -77,6 +84,8 @@ public class Frame
         {
             return true;
         }
+        
+    
         
         return (rolls.Count >= MaxRollsPerFrame);
        
@@ -89,7 +98,7 @@ public class Frame
             rolls.Add(roll);
             totalRollsIndex = TotalRolls.Count;
             TotalRolls.Add(roll);
-            UpdateFrameScores();
+            UpdateCumulativeFrameScores();
         }
         else
         {
@@ -109,7 +118,7 @@ public class Frame
         {
             additionalRolls = StrikeScoreRolls;     
         }
-        if (IsSpare())
+        else if (IsSpare())
         {
             additionalRolls = SpareScoreRolls;
         }
@@ -134,26 +143,43 @@ public class Frame
         return rolls.Sum(); 
     }
 
-    private bool IsStrike()
+    public bool IsStrike()
     {
         return rolls[0] == 10;
     }
 
-    private bool IsSpare()
+    public bool IsSpare()
     {
         return (rolls[0] + rolls[1] == 10);
     }
 
     private bool ExtraBowlAwarded()
     {
-        if (tenthFrame)
+        if (lastFrame)
         {
             //strike or spare
-            if (rolls[0] == 10 || (rolls.Count >= MaxRollsPerFrame && rolls[0] + rolls[1] == TotalPinsPerFrame))
+            if (rolls[0] == 10)
+            {
+                return true;
+            }
+
+            if (rolls.Count >= MaxRollsPerFrame && (rolls[0] + rolls[1] == TotalPinsPerFrame))
             {
                 return true;
             }
         }
         return false;
+    }
+
+    public bool IsLastFrame()
+    {
+        return lastFrame;
+    }
+
+    public static void ResetFrames()
+    {
+        FrameList.Clear();
+        TotalRolls.Clear();
+        FrameScores.Clear();
     }
 }

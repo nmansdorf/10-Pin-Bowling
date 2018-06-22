@@ -14,7 +14,6 @@ public class FrameScoreDisplay : MonoBehaviour
 	public Text Strike;
 	//set on the UI for the 10th frame
 	public bool TenthFrame;
-	private const int STRIKE = 10;
 	private int previousScore;
 
 	private void Start()
@@ -22,25 +21,28 @@ public class FrameScoreDisplay : MonoBehaviour
 		ResetScore();
 	}
 
-	public void SetFrameScore(int score)
+	public void SetFrameScore(int? score)
 	{
-		TotalScore.gameObject.SetActive(true);
-		TotalScore.text = score.ToString();
+		if (score != null)
+		{
+			TotalScore.gameObject.SetActive(true);
+			TotalScore.text = score.ToString();
+		}
 	}
 
-	public void SetRollScore(int score)
+	public void SetRollScore(List<int> rolls)
 	{
 		if (!Bowl1Score.IsActive())
 		{
 			previousScore = -1; //need to skip the spare check on the first bowl of a frame
-			SetRollScoreText(score, Bowl1Score);
+			SetRollScoreText(rolls[0], Bowl1Score);
 		}
 		else if (!Bowl2Score.IsActive())
 		{
-			SetRollScoreText(score, Bowl2Score);	
+			SetRollScoreText(rolls[1], Bowl2Score);	
 		} else if (TenthFrame && !Bowl3Score.IsActive())
 		{
-			SetRollScoreText(score, Bowl3Score);
+			SetRollScoreText(rolls[2], Bowl3Score);
 		}
 	}
 
@@ -86,13 +88,10 @@ public class FrameScoreDisplay : MonoBehaviour
 		{
 			Bowl3Score.gameObject.SetActive(false);
 			Bowl3Score.text = "";
+			return;
 		}
-
-		if (!TenthFrame)
-		{
-			Strike.gameObject.SetActive(false);
-			Strike.text = "";
-		}		
+		Strike.gameObject.SetActive(false);
+		Strike.text = "";
 	}
 	
 }

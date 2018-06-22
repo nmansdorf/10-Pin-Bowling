@@ -1,13 +1,16 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
 
-	public List<Bowl> BowlList = new List<Bowl>();
-	public float CameraResetDelay = 4f;
 	
+	public float CameraResetDelay = 4f;
+
+	private Frame currentFrame;
 	private PinsController pinsController;
 	private BowlingBall ball;
 	private ActionMaster actionMaster = new ActionMaster();
@@ -15,7 +18,6 @@ public class GameManager : MonoBehaviour
 	private ScoreManager scoreManager;
 	private const int TOTAL_PINS = 10;
 	
-	// Use this for initialization
 	void Start ()
 	{
 		pinsController = FindObjectOfType<PinsController>();
@@ -26,9 +28,17 @@ public class GameManager : MonoBehaviour
 	
 	public int HandleEndBowl(int lastSettledCount, int standingCount)
 	{
-		BowlList.Add(new Bowl(lastSettledCount - standingCount));
-		var action = actionMaster.Bowl(BowlList);
-		scoreManager.UpdateScore(BowlList);
+		var roll = lastSettledCount - standingCount;
+		if (Frame.FrameList.Count < 1 || Frame.FrameList.Last().IsFrameComplete())
+		{
+			currentFrame = new Frame(roll);
+		}
+		else
+		{
+			currentFrame.AddRoll(roll);
+		}
+		var action = actionMaster.NextAction(currentFrame);
+		scoreManager.UpdateScoreDisplays();
 		
 		switch (action)
 		{
@@ -52,7 +62,7 @@ public class GameManager : MonoBehaviour
 	private void EndGame()
 	{
 		pinsController.FrameReset();
-		BowlList.Clear();
+		Frame.ResetFrames();
 		ResetScoresInTime(5f);
 		SetUpNextShot(5f);
 	}
@@ -94,7 +104,7 @@ public class GameManager : MonoBehaviour
 
 	private void ResetScores()
 	{
-		scoreManager.ResetScores();
+		scoreManager.ResetScoresDisplay();
 	}
 
 	private void ResetScoresInTime(float time)
