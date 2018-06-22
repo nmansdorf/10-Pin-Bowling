@@ -45,7 +45,7 @@ public class Frame
         {
             var frame = FrameList[i];
             
-            if (frame.GetFrameScore()!= null)
+            if (frame.GetFrameScore() != null)
             {
                 if (i == 0)
                 {
@@ -135,7 +135,7 @@ public class Frame
             score = 10;
             for (int i = 1; i <= additionalRolls; i++)
             {
-                score += TotalRolls[totalRollsIndex + additionalRolls];
+                score += TotalRolls[totalRollsIndex + i];
             }
             return score;
         }
@@ -163,7 +163,8 @@ public class Frame
                 return true;
             }
 
-            if (rolls.Count >= MaxRollsPerFrame && (rolls[0] + rolls[1] == TotalPinsPerFrame))
+            if (rolls.Count >= MaxRollsPerFrame 
+                && (rolls[0] + rolls[1] == TotalPinsPerFrame))
             {
                 return true;
             }

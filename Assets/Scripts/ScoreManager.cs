@@ -8,14 +8,9 @@ public class ScoreManager : MonoBehaviour
 {
 
 	public List<FrameScoreDisplay> FrameScoreDisplays;
-	
-
-	private Frame currentFrame;
-
 
 	public void UpdateScoreDisplays()
 	{
-		
 		//Update the proper display with a subscore
 		SetRollScoreDisplays();
 		
@@ -28,10 +23,9 @@ public class ScoreManager : MonoBehaviour
 	private void SetRollScoreDisplays()
 	{
 		var frames = Frame.FrameList;
-		for (int i = 0; i < frames.Count; i++)
+		foreach (var frame in frames)
 		{
-			var frame = frames[i];
-			FrameScoreDisplays[frame.frameNumber].SetRollScore(frame.GetRolls());
+			FrameScoreDisplays[frame.frameNumber-1].SetRollScore(frame.GetRolls());
 		}
 	}
 

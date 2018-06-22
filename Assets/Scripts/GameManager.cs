@@ -6,8 +6,6 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-
-	
 	public float CameraResetDelay = 4f;
 
 	private Frame currentFrame;
@@ -24,6 +22,7 @@ public class GameManager : MonoBehaviour
 		ball = FindObjectOfType<BowlingBall>();
 		mCameraControl = FindObjectOfType<CameraControl>();
 		scoreManager = FindObjectOfType<ScoreManager>();
+		Frame.ResetFrames();
 	}
 	
 	public int HandleEndBowl(int lastSettledCount, int standingCount)

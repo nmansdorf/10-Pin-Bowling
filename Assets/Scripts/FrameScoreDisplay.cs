@@ -32,15 +32,15 @@ public class FrameScoreDisplay : MonoBehaviour
 
 	public void SetRollScore(List<int> rolls)
 	{
-		if (!Bowl1Score.IsActive())
+		if (!Bowl1Score.IsActive() && rolls.Count == 1)
 		{
 			previousScore = -1; //need to skip the spare check on the first bowl of a frame
 			SetRollScoreText(rolls[0], Bowl1Score);
 		}
-		else if (!Bowl2Score.IsActive())
+		else if (!Bowl2Score.IsActive() && rolls.Count == 2)
 		{
 			SetRollScoreText(rolls[1], Bowl2Score);	
-		} else if (TenthFrame && !Bowl3Score.IsActive())
+		} else if (TenthFrame && !Bowl3Score.IsActive() && rolls.Count ==3)
 		{
 			SetRollScoreText(rolls[2], Bowl3Score);
 		}
@@ -64,7 +64,7 @@ public class FrameScoreDisplay : MonoBehaviour
 			}
 			else
 			{
-				text = Strike;    //Strike on not 10th frame takes up whole roll box
+				text = Strike;    //Strike on anything but last frame takes up whole roll box
 				text.text = "X";			
 			}	
 		}

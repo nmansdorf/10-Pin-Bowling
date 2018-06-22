@@ -23,6 +23,17 @@ public class PinsController : MonoBehaviour
 		LowerPins();
 	}
 
+	public void DebugStrike()
+	{
+		foreach (var pin in pins)
+		{
+			if (pin != null)
+			{
+				pin.GetComponent<Rigidbody>().AddForce(Vector3.right * 200, ForceMode.Impulse);
+			}
+		}
+	}
+
 
 	private void CleanUpAllPins()
 	{
