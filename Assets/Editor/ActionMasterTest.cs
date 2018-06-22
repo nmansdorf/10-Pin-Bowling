@@ -17,7 +17,6 @@ public class ActionMasterTest
 	[SetUp]
 	public void Setup()
 	{
-		var obj = new GameObject();
 		actionMaster = new ActionMaster();
 	}
 

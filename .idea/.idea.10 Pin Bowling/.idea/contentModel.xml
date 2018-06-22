@@ -24,6 +24,7 @@
           <e p="BowlingBall.cs" t="Include" />
           <e p="CameraControl.cs" t="Include" />
           <e p="DragLaunch.cs" t="Include" />
+          <e p="Frame.cs" t="Include" />
           <e p="FrameScoreDisplay.cs" t="Include" />
           <e p="GameManager.cs" t="Include" />
           <e p="Pin.cs" t="Include" />
