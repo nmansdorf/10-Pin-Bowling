@@ -20,7 +20,6 @@
         </e>
         <e p="Scripts" t="Include">
           <e p="ActionMaster.cs" t="Include" />
-          <e p="Bowl.cs" t="Include" />
           <e p="BowlingBall.cs" t="Include" />
           <e p="CameraControl.cs" t="Include" />
           <e p="DragLaunch.cs" t="Include" />
@@ -32,7 +31,6 @@
           <e p="PinPosition.cs" t="Include" />
           <e p="PinsController.cs" t="Include" />
           <e p="ScoreManager.cs" t="Include" />
-          <e p="UnfinishedFrame.cs" t="Include" />
         </e>
       </e>
       <e p="Library" t="ExcludeRecursive" />
