@@ -42,6 +42,7 @@ public class GameManager : MonoBehaviour
 		var action = actionMaster.NextAction(currentFrame);
 		
 		scoreManager.UpdateScoreDisplays();
+		ball.ResetBall();
 		
 		switch (action)
 		{
@@ -83,7 +84,6 @@ public class GameManager : MonoBehaviour
 
 	private void SetUpNextShot(float time)
 	{
-		ball.ResetBall();
 		Invoke("ResetCamera",time);
 		Invoke("SetReadyToLaunchFlag", time);
 	}
