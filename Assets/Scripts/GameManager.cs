@@ -3,10 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Experimental.UIElements;
 
 public class GameManager : MonoBehaviour
 {
 	public float CameraResetDelay = 4f;
+	public GameObject GameUI;
+	public GameObject GameOverPanel;
 
 	private Frame currentFrame;
 	private PinsController pinsController;
@@ -60,10 +63,7 @@ public class GameManager : MonoBehaviour
 
 	private void EndGame()
 	{
-		pinsController.FrameReset();
-		Frame.ResetFrames();
-		ResetScoresInTime(5f);
-		SetUpNextShot(5f);
+		
 	}
 
 	private void EndFrame()

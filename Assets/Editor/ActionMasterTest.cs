@@ -160,10 +160,10 @@ public class ActionMasterTest
 	}
 
 	[Test]
-	public void T08TidyOnFrame20AfterStrike()
+	public void T08TidyOnFrame20AfterStrikeThenBowl()
 	{
 		Frame.ResetFrames();
-		int[] rolls = {1,1, 1,1, 1,1, 1,1, 1,1, 1,1, 1,1, 1,1, 1,1, 10};
+		int[] rolls = {1,1, 1,1, 1,1, 1,1, 1,1, 1,1, 1,1, 1,1, 1,1, 10,1};
 		for (int i= 0; i < rolls.Length; i++)
 		{
 			if (Frame.FrameList.Count < 1 || Frame.FrameList.Last().IsFrameComplete())
@@ -175,7 +175,7 @@ public class ActionMasterTest
 				currentFrame.AddRoll(rolls[i]);
 			}	
 		}	
-		Assert.AreEqual(frameReset, actionMaster.NextAction(currentFrame)); 
+		Assert.AreEqual(midFrameReset, actionMaster.NextAction(currentFrame)); 
 	}
 
 	[Test]

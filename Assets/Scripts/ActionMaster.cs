@@ -37,7 +37,7 @@ public class ActionMaster
 				return Action.EndGame;
 			}
 
-			if (frame.IsStrike() || (frame.GetRolls().Count >= 2 && frame.IsSpare()))
+			if (frame.GetRolls().Last() == 10 || (frame.GetRolls().Count == 2 && frame.IsSpare()))
 			{
 				return Action.FrameReset;
 			}
