@@ -20,7 +20,7 @@ public class Frame
     
     //frame variables
     public readonly int frameNumber;
-    private int totalRollsIndex; //index of the last roll in the frame relative to total rolls
+    private int strikeOrSpareIndex;
     private bool lastFrame;
     private List<int> rolls = new List<int>();
 
@@ -33,7 +33,10 @@ public class Frame
             lastFrame = true;
         }
         rolls.Add(roll);
-        totalRollsIndex = TotalRolls.Count;
+        if (IsStrike()) //needed for strike scoring
+        {
+            strikeOrSpareIndex = TotalRolls.Count;
+        }
         TotalRolls.Add(roll);
         UpdateCumulativeFrameScores();
     }
@@ -85,10 +88,7 @@ public class Frame
             return true;
         }
         
-    
-        
         return (rolls.Count >= MaxRollsPerFrame);
-       
     }
 
     public void AddRoll(int roll)
@@ -96,7 +96,10 @@ public class Frame
         if(!IsFrameComplete())
         {
             rolls.Add(roll);
-            totalRollsIndex = TotalRolls.Count;
+            if (IsSpare()) //needed for spare scoring
+            {
+                strikeOrSpareIndex = TotalRolls.Count;
+            }
             TotalRolls.Add(roll);
             UpdateCumulativeFrameScores();
         }
@@ -127,7 +130,7 @@ public class Frame
         if (additionalRolls > 0)
         {
             //check to see if enough frames bowled
-            if (TotalRolls.Count <= totalRollsIndex + additionalRolls)
+            if (TotalRolls.Count <= strikeOrSpareIndex + additionalRolls)
             {
                 return null;
             }
@@ -135,7 +138,7 @@ public class Frame
             score = 10;
             for (int i = 1; i <= additionalRolls; i++)
             {
-                score += TotalRolls[totalRollsIndex + i];
+                score += TotalRolls[strikeOrSpareIndex + i];
             }
             return score;
         }

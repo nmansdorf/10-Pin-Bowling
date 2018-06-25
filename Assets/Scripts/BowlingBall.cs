@@ -19,8 +19,8 @@ public class BowlingBall : MonoBehaviour
 	private Rigidbody ballRigidbody;
 	private AudioSource audioSource;
 	private string translationDirection;
-	private const float LANE_BOUNDS = 0.45f;
-	private Vector3 GUTTERBALL_BOUNDS = new Vector3(1, -1, 27);
+	private const float LaneBounds = 0.45f;
+	private Vector3 GutterballBounds = new Vector3(1, -1, 27);
 	private bool readyToLaunch;
 	private bool hasLaunched;
 	private bool ballEnteredBox;
@@ -96,10 +96,15 @@ public class BowlingBall : MonoBehaviour
 
 	public bool IsOffLane()
 	{
-		return (transform.position.x > GUTTERBALL_BOUNDS.x || 
-		        transform.position.x < -GUTTERBALL_BOUNDS.x || 
-		        transform.position.z > GUTTERBALL_BOUNDS.z ||
-		        transform.position.y < GUTTERBALL_BOUNDS.y);
+		if (transform.position.x > Mathf.Abs(GutterballBounds.x) ||
+		    transform.position.z > GutterballBounds.z ||
+		    transform.position.y < GutterballBounds.y)
+		{
+			ResetBall();
+			return true;
+		}
+
+		return false;
 	}
 
 	public void ResetBall()
@@ -119,12 +124,12 @@ public class BowlingBall : MonoBehaviour
 		if(!isMoving)
 		{
 			position += direction * TranslationCoefficient;
-			if (position.x >= LANE_BOUNDS)
+			if (position.x >= LaneBounds)
 			{
-				position = new  Vector3(LANE_BOUNDS, position.y, position.z);
-			} else if (position.x <= -LANE_BOUNDS)
+				position = new  Vector3(LaneBounds, position.y, position.z);
+			} else if (position.x <= -LaneBounds)
 			{
-				position = new Vector3(-LANE_BOUNDS, position.y, position.z);
+				position = new Vector3(-LaneBounds, position.y, position.z);
 			}
 
 			gameObject.transform.position = position;

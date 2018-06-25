@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 public class ScoreManager : MonoBehaviour
 {
 
 	public List<FrameScoreDisplay> FrameScoreDisplays;
+	public Text FinalScore;
 
 	public void UpdateScoreDisplays()
 	{
@@ -32,10 +34,17 @@ public class ScoreManager : MonoBehaviour
 	private void SetTotalScoresDisplay()
 	{
 		var scores = Frame.FrameScores;
+		var scoreText = "";
 		for (int i = 0; i < scores.Count; i++)
 		{
 			FrameScoreDisplays[i].SetFrameScore(scores[i]);
-		}
+			if (i == 9)
+			{
+				SetFinalScoreText();
+			}
+			scoreText += "Frame " + i + " Score: " + scores[i];
+		}	
+		Debug.Log(scoreText);
 	}
 
 	public void ResetScoresDisplay()
@@ -46,4 +55,8 @@ public class ScoreManager : MonoBehaviour
 		}
 	}
 
+	private void SetFinalScoreText()
+	{
+		FinalScore.text = "Final Score: " + Frame.FrameScores.Last();
+	}
 }

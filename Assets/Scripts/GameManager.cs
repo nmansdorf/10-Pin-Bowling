@@ -40,6 +40,7 @@ public class GameManager : MonoBehaviour
 			currentFrame.AddRoll(roll);
 		}
 		var action = actionMaster.NextAction(currentFrame);
+		
 		scoreManager.UpdateScoreDisplays();
 		
 		switch (action)
@@ -63,27 +64,23 @@ public class GameManager : MonoBehaviour
 
 	private void EndGame()
 	{
-		
+		GameUI.SetActive(false);
+		GameOverPanel.SetActive(true);
+		SetUpNextShot(CameraResetDelay);
 	}
 
 	private void EndFrame()
 	{
 		pinsController.FrameReset();
-		SetUpNextShot();
+		SetUpNextShot(CameraResetDelay);
 	}
 
 	private void EndRoll()
 	{
 		pinsController.MidFrameReset();
-		SetUpNextShot();
+		SetUpNextShot(CameraResetDelay);
 	}
 
-	private void SetUpNextShot()
-	{
-		ball.ResetBall();
-		Invoke("ResetCamera",CameraResetDelay);
-		Invoke("SetReadyToLaunchFlag", CameraResetDelay);
-	}
 	private void SetUpNextShot(float time)
 	{
 		ball.ResetBall();
@@ -103,11 +100,22 @@ public class GameManager : MonoBehaviour
 
 	private void ResetScores()
 	{
+		
 		scoreManager.ResetScoresDisplay();
+			
 	}
 
 	private void ResetScoresInTime(float time)
 	{
 		Invoke("ResetScores", time);
+	}
+
+	public void NewGame()
+	{	
+		ResetScores();
+		Frame.ResetFrames();
+		pinsController.FrameReset();
+		GameUI.SetActive(true);
+		GameOverPanel.SetActive(false);
 	}
 }
