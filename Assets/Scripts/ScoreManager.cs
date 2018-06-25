@@ -34,7 +34,7 @@ public class ScoreManager : MonoBehaviour
 	private void SetTotalScoresDisplay()
 	{
 		var scores = Frame.FrameScores;
-		var scoreText = "";
+		
 		for (int i = 0; i < scores.Count; i++)
 		{
 			FrameScoreDisplays[i].SetFrameScore(scores[i]);
@@ -42,9 +42,8 @@ public class ScoreManager : MonoBehaviour
 			{
 				SetFinalScoreText();
 			}
-			scoreText += "Frame " + i + " Score: " + scores[i];
 		}	
-		Debug.Log(scoreText);
+		
 	}
 
 	public void ResetScoresDisplay()
